@@ -13,7 +13,8 @@
     "lint": "eslint .",
     "precommit": "npm run lint",
     "test": "npm run build && ava",
-    "format": "prettier --loglevel error --write \"./src/**/*.ts\" \"./test.js\" \"./rollup.config.ts\" \"*.md\""
+    "format": "prettier --loglevel error --write \"./src/**/*.ts\" \"./test.js\" \"./rollup.config.ts\" \"*.md\"",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -43,6 +44,7 @@
     "eslint": "^7.23.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
+    "husky": "6.0.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.44.0",
     "rollup-plugin-auto-external": "^2.0.0",
