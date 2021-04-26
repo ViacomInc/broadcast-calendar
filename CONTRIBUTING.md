@@ -13,8 +13,8 @@ Make sure you have the correct version of Node installed. See the `.nvmrc` file
 for the current version for the project
 
 ```bash
-git clone git@github.com:ViacomInc/openap-inventory-manager.git
-cd openap-inventory-manager
+git clone git@github.com:ViacomInc/broadcast-calendar.git
+cd broadcast-calendar
 npm install
 ```
 
@@ -32,20 +32,23 @@ To run the tests you may run any of the following commands:
 
 ```bash
 # runs all unit tests with test coverage
-yarn run test
-
-# runs all unit tests with test coverage and with watch mode
-yarn run test:watch
+npm run test
 ```
 
 ## Code Standards
 
 **Linting**
 
+> These things should all be automated when committing and pushing. Descriptions
+> here are just so you're aware.
+
 We are mainly using `typescript-eslint` settings with a few overrides. See the
 `.estlintrc.js` file for details.
 
 **Formatting**
+
+> These things should all be automated when committing and pushing. Descriptions
+> here are just so you're aware.
 
 We are using [Prettier](https://prettier.io) for javascript style formatting.
 Settings can be found in the `.prettierrc` file.
@@ -74,6 +77,7 @@ Programming](https://mostly-adequate.gitbook.io/mostly-adequate-guide/).
 4. Push to the branch `git push origin feature/my-new-feature`
 5. Create a new [Pull
    Request](https://github.com/ViacomInc/openap-inventory-manager/compare)
+6. Profit
 
 ### Updating Documentation
 
