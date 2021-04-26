@@ -49,3 +49,6 @@ __generated__/
 # ignore distribution folder
 dist/
 lib/
+
+# NYC output
+.nyc_output
