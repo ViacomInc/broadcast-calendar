@@ -2,7 +2,9 @@
 
 ![build](https://github.com/ViacomInc/broadcast-calendar/actions/workflows/main.yml/badge.svg)
 
-[Broadcast Calendar](https://en.wikipedia.org/wiki/Broadcast_calendar)
+This is a collection of functions to help converting good ol' dates and times to
+_Broadcast_ dates and times when you need to be working in the
+[Broadcast Calendar](https://en.wikipedia.org/wiki/Broadcast_calendar).
 
 ## Installation
 
