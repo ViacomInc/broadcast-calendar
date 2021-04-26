@@ -10,6 +10,7 @@ const {
   getBroadcastQuarter,
   getBroadcastYearQuarter,
   getBroadcastWeek,
+  getBroadcastQuarterWeek,
   makeFormatter,
 } = require("./");
 
@@ -160,13 +161,23 @@ const broadcastWeekTestDate = [
   ["2018-12-30", 52],
   ["2018-12-31", 1],
   ["2019-08-27", 35],
+  ["2019-03-31", 13],
+  ["2019-04-01", 14],
+  ["2019-06-30", 26],
+  ["2019-07-01", 27],
+  ["2019-09-29", 39],
+  ["2019-09-30", 40],
+  ["2019-12-29", 52],
+  ["2019-12-30", 1],
   ["2019-12-31", 1],
   ["2020-04-20", 17],
+  ["2020-04-30", 18],
   ["2020-07-13", 29],
   ["2020-12-27", 52],
   ["2021-06-28", 27],
   ["2021-12-26", 52],
   ["2021-12-27", 1],
+  ["2021-12-31", 1],
   ["2022-06-26", 26],
   ["2022-06-27", 27],
   ["2022-12-25", 52],
@@ -232,6 +243,16 @@ test("broadcast calendar range", (t) => {
         quarter: expected.broadcastQuarter,
       },
       `getBroadcastYearQuarter expects ${expected.broadcastYear} ${expected.broadcastQuarter}`
+    );
+
+    const expectedWeekNubmer = broadcastWeekTestDate.find(
+      (w) => weekStr === w[0]
+    );
+
+    t.deepEqual(
+      getBroadcastQuarterWeek(parseDateFromISO(week)),
+      [expected.broadcastQuarter, expectedWeekNubmer[1]],
+      `getBroadcastQuarterWeek ${week} expects [${expected.broadcastQuarter} ${expectedWeekNubmer[1]}]`
     );
   });
 });
