@@ -44,6 +44,7 @@ __generated__/
 
 # husky working folder
 .husky/
+!.husky/pre-*
 
 # ignore distribution folder
 dist/
