@@ -2,8 +2,8 @@
 
 ![build](https://github.com/ViacomInc/broadcast-calendar/actions/workflows/main.yml/badge.svg)
 
-This is a collection of functions to help converting good ol' dates and times to
-_Broadcast_ dates and times when you need to be working in the
+This is a collection of functions to help converting good ol' dates to
+_Broadcast_ dates when you need to be working in the
 [Broadcast Calendar](https://en.wikipedia.org/wiki/Broadcast_calendar).
 
 ## Installation
@@ -93,4 +93,4 @@ Parses string interval and returns `luxon` Interval in US Broadcast calendar tim
 
 Takes `Interval` instance and returns a tuple with two ISO (or with `format` function) formatted dates
 
-License Apache 2.0;
+License Apache 2.0 - see [LICENSE](./LICENSE) for more details.
