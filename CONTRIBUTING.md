@@ -73,9 +73,8 @@ Programming](https://mostly-adequate.gitbook.io/mostly-adequate-guide/).
 3. Commit your changes
 4. Push to the branch `git push origin feature/my-new-feature`
 5. Create a new [Pull
-Request](https://github.com/ViacomInc/openap-inventory-manager/compare)
+   Request](https://github.com/ViacomInc/openap-inventory-manager/compare)
 
 ### Updating Documentation
 
 Please update the respective README.md files with details of changes to the interface or code.
-

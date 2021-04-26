@@ -12,7 +12,8 @@
     "build": "rollup -c rollup.config.ts",
     "lint": "eslint .",
     "precommit": "npm run lint",
-    "test": "ava"
+    "test": "npm run build && ava",
+    "format": "prettier --loglevel error --write \"./src/**/*.ts\" \"./test.js\" \"./rollup.config.ts\" \"*.md\""
   },
   "repository": {
     "type": "git",
