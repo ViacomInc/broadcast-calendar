@@ -89,4 +89,4 @@ Parses string interval and returns `luxon` Interval in US Broadcast calendar tim
 
 Takes `Interval` instance and returns a tuple with two ISO (or with `format` function) formatted dates
 
-License MIT;
+License Apache 2.0;
