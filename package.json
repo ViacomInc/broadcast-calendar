@@ -12,6 +12,10 @@
     "precommit": "npm run lint",
     "test": "npm run build && ava"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ViacomInc/broadcast-calendar.git"
+  },
   "keywords": [
     "date",
     "dates",
@@ -22,7 +26,7 @@
     "node": ">=14.0.0"
   },
   "author": "ViacomCBS",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "luxon": "^1.26.0"
   },
