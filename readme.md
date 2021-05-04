@@ -1,5 +1,7 @@
 # US Broadcast Calendar Date Functions
 
+![build](https://github.com/ViacomInc/broadcast-calendar/actions/workflows/main.yml/badge.svg)
+
 [Broadcast Calendar](https://en.wikipedia.org/wiki/Broadcast_calendar)
 
 ## Installation
