@@ -1,5 +1,7 @@
 # US Broadcast Calendar Date Functions
 
+[Broadcast Calendar](https://en.wikipedia.org/wiki/Broadcast_calendar)
+
 ## Installation
 
 `npm i broadcast-calendar`
