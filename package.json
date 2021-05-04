@@ -10,7 +10,7 @@
     "build": "rollup -c rollup.config.ts",
     "lint": "eslint .",
     "precommit": "npm run lint",
-    "test": "npm run build && ava"
+    "test": "ava"
   },
   "repository": {
     "type": "git",
