@@ -1,0 +1,7 @@
+.*
+*.log
+test*
+test/
+src/
+mocha*
+tsconfig*
