@@ -8,6 +8,6 @@ export type YearQuarters = {
   quarters: number[];
 };
 
-export const BroadCastTimeZone = "America/New_York";
+export const BroadcastTimeZone = "America/New_York";
 
 export type StringInterval = [string, string];

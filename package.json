@@ -1,5 +1,5 @@
 {
-  "name": "broadcast-calendar",
+  "name": "@viacomcbs/broadcast-calendar",
   "version": "1.0.0",
   "description": "Broadcast Calendar Dates Functions",
   "author": "ViacomCBS",

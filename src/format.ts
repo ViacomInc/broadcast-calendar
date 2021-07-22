@@ -1,8 +1,8 @@
 import { DateTime, Interval } from "luxon";
-import { BroadCastTimeZone, StringInterval } from "./types";
+import { BroadcastTimeZone, StringInterval } from "./types";
 
 export const makeFormatter = (format: string) => (date: DateTime): string =>
-  date.setZone(BroadCastTimeZone).toFormat(format);
+  date.setZone(BroadcastTimeZone).toFormat(format);
 
 const dateFormat = makeFormatter("yyyy-MM-dd");
 

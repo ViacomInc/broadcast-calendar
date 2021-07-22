@@ -1,12 +1,12 @@
 import { DateTime, Interval } from "luxon";
-import { BroadCastTimeZone, StringInterval } from "./types";
+import { BroadcastTimeZone, StringInterval } from "./types";
 
 export function parseDateFromSQL(date: string): DateTime {
-  return DateTime.fromSQL(date, { zone: BroadCastTimeZone });
+  return DateTime.fromSQL(date, { zone: BroadcastTimeZone });
 }
 
 export function parseDateFromISO(date: string): DateTime {
-  return DateTime.fromISO(date, { zone: BroadCastTimeZone });
+  return DateTime.fromISO(date, { zone: BroadcastTimeZone });
 }
 
 export function parseIntervalFromSQL(range: StringInterval): Interval {

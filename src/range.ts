@@ -1,6 +1,6 @@
 import { DateTime, Interval } from "luxon";
 
-import { BroadCastTimeZone, YearQuarter } from "./types";
+import { BroadcastTimeZone, YearQuarter } from "./types";
 
 function getLastSunday(date: DateTime): DateTime {
   return date.minus({ day: date.weekday % 7 });
@@ -53,7 +53,7 @@ export function getBroadcastQuarterRange(date: DateTime): Interval {
     year: currentYear,
     month: quarterStartMonth,
     day: 1,
-    zone: BroadCastTimeZone,
+    zone: BroadcastTimeZone,
   });
 
   const start = getBroadcastWeekRange(startOfQuarterDate).start;
