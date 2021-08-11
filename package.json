@@ -1,6 +1,6 @@
 {
   "name": "@viacomcbs/broadcast-calendar",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Broadcast Calendar Dates Functions",
   "author": "ViacomCBS",
   "license": "Apache-2.0",
@@ -30,8 +30,6 @@
   "engines": {
     "node": ">=16.0.0"
   },
-  "author": "ViacomCBS",
-  "license": "Apache-2.0",
   "dependencies": {
     "luxon": "^2.0.0"
   },
