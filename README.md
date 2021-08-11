@@ -8,7 +8,7 @@ _Broadcast_ dates when you need to be working in the
 
 ## Installation
 
-`npm i broadcast-calendar`
+`npm i @viacomcbs/broadcast-calendar`
 
 This library uses [luxon](https://moment.github.io/luxon/) to work with dates.
 

@@ -49,12 +49,14 @@ export function getBroadcastQuarterRange(date: DateTime): Interval {
   const currentMonth = quarterDate.month;
   const quarterStartMonth = currentMonth - ((currentMonth - 1) % 3);
 
-  const startOfQuarterDate = DateTime.fromObject({
-    year: currentYear,
-    month: quarterStartMonth,
-    day: 1,
-    zone: BroadcastTimeZone,
-  });
+  const startOfQuarterDate = DateTime.fromObject(
+    {
+      year: currentYear,
+      month: quarterStartMonth,
+      day: 1,
+    },
+    { zone: BroadcastTimeZone }
+  );
 
   const start = getBroadcastWeekRange(startOfQuarterDate).start;
   const end = getLastSunday(
