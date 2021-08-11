@@ -61,6 +61,10 @@ return true if a is greater than b
 
 returns broadcast week number for a given date
 
+- **getBroadcastWeekKey(date: DateTime): number**
+
+returns broadcast week key for a given date. Examples: `202103`, `2022032`
+
 ### Range
 
 Set of functions that return broadcast dates `Interval` for a given date.

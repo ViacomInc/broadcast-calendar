@@ -1,20 +1,49 @@
 const test = require("ava");
 const {
+  Interval,
   parseDateFromISO,
+  parseDateFromSQL,
+  parseIntervalFromSQL,
+  parseIntervalFromISO,
   formatBroadcastDateRange,
   getBroadcastWeekRange,
   getBroadcastMonthRange,
   getBroadcastQuarterRange,
   getBroadcastYearRange,
+  getBroadcastQuarterRangeFromYearQuarter,
+  getBroadcastWeeksInRange,
   getBroadcastYear,
   getBroadcastQuarter,
   getBroadcastYearQuarter,
+  getBroadcastYearsQuarters,
   getBroadcastWeek,
+  getBroadcastWeekKey,
   getBroadcastQuarterWeek,
   makeFormatter,
+  yearQuarterIsGreaterThan,
+  incrementYearQuarter,
+  isYearQuarter,
 } = require("./");
 
 const testFormat = makeFormatter("yyyy-MM-dd EEE");
+
+test("parsing dates", (t) => {
+  t.is(parseDateFromSQL("2021-07-23 03:15:00").toISODate(), "2021-07-23");
+  t.is(parseDateFromSQL("2021-08-11").toISODate(), "2021-08-11");
+  t.is(parseDateFromISO("2021-07-23T03:15:00").toISODate(), "2021-07-23");
+  t.is(parseDateFromISO("2021-08-11").toISODate(), "2021-08-11");
+});
+
+test("parsing intervals", (t) => {
+  t.is(
+    parseIntervalFromSQL(["2021-07-23 03:15:00", "2021-08-11"]).isValid,
+    true
+  );
+  t.is(
+    parseIntervalFromISO(["2021-07-23T03:15:00", "2021-08-11"]).isValid,
+    true
+  );
+});
 
 const broadcastTestData = [
   [
@@ -254,5 +283,118 @@ test("broadcast calendar range", (t) => {
       [expected.broadcastQuarter, expectedWeekNubmer[1]],
       `getBroadcastQuarterWeek ${week} expects [${expected.broadcastQuarter} ${expectedWeekNubmer[1]}]`
     );
+
+    t.deepEqual(
+      formatBroadcastDateRange(
+        getBroadcastQuarterRangeFromYearQuarter({
+          year: expected.broadcastYear,
+          quarter: expected.broadcastQuarter,
+        }),
+        testFormat
+      ),
+      expected.quarter,
+      `getBroadcastQuarterRangeFromYearQuarter expects ${expected.quarter.toString()}`
+    );
   });
+});
+
+const broadcastWeekKeys = {
+  "2016-12-31": 201701,
+  "2017-12-31": 201753,
+  "2018-04-30": 201818,
+  "2018-05-28": 201822,
+  "2018-08-27": 201835,
+  "2018-12-30": 201852,
+  "2018-12-31": 201901,
+  "2019-08-27": 201935,
+  "2019-12-31": 202001,
+  "2020-04-20": 202017,
+  "2020-12-27": 202052,
+  "2021-06-28": 202127,
+  "2021-12-26": 202152,
+  "2021-12-27": 202201,
+  "2022-06-26": 202226,
+  "2022-06-27": 202227,
+  "2022-12-25": 202252,
+  "2022-12-26": 202301,
+  "2023-12-30": 202353,
+  "2028-12-29": 202853,
+};
+
+test("getBroadcastWeekKey", (t) => {
+  Object.entries(broadcastWeekKeys).map(([dateStr, weekKey]) => {
+    const date = parseDateFromISO(dateStr);
+    t.is(
+      getBroadcastWeekKey(date),
+      weekKey,
+      `getBroadcastWeekKey for ${dateStr} expects ${weekKey}`
+    );
+  });
+});
+
+test("year quarter comparasing function", (t) => {
+  const larger = { year: 2021, quarter: 4 };
+  const smaller = { year: 2020, quarter: 4 };
+
+  t.is(yearQuarterIsGreaterThan(smaller, larger), false);
+  t.is(yearQuarterIsGreaterThan(larger, smaller), true);
+  t.is(yearQuarterIsGreaterThan(larger, larger), false);
+});
+
+test("year quarter increment function", (t) => {
+  const yq = { year: 2021, quarter: 4 };
+
+  t.deepEqual(incrementYearQuarter(yq, 1), { year: 2022, quarter: 1 });
+  t.deepEqual(incrementYearQuarter(yq, -4), { year: 2020, quarter: 4 });
+});
+
+test("year quarter type guard", (t) => {
+  t.is(isYearQuarter({ year: 2021, quarter: 4 }), true);
+  t.is(isYearQuarter({ year: 2021 }), false);
+  t.is(isYearQuarter({ quarter: 4 }), false);
+  t.is(isYearQuarter({ year: "2021", quarter: 4 }), false);
+  t.is(isYearQuarter({ year: "2021", quarter: "4" }), false);
+  t.is(isYearQuarter(), false);
+});
+
+test("years quarters from Interval", (t) => {
+  const interval = Interval.fromISO("2020-07-01/2021-07-01");
+  const yearsQuarters = getBroadcastYearsQuarters(interval);
+
+  t.deepEqual(yearsQuarters, [
+    {
+      year: 2020,
+      quarters: [3, 4],
+    },
+    {
+      year: 2021,
+      quarters: [1, 2, 3],
+    },
+  ]);
+});
+
+test("broadcast weeks in range", (t) => {
+  const range = Interval.fromISO("2021-07-23/2021-08-11");
+  const weeksIntervals = getBroadcastWeeksInRange(range).map(
+    ({ start, end }) => ({ start: start.toISODate(), end: end.toISODate() })
+  );
+
+  t.deepEqual(weeksIntervals, [
+    {
+      start: "2021-07-19",
+      end: "2021-07-25",
+    },
+    {
+      start: "2021-07-26",
+      end: "2021-08-01",
+    },
+    {
+      start: "2021-08-02",
+      end: "2021-08-08",
+    },
+    {
+      start: "2021-08-09",
+      end: "2021-08-15",
+    },
+  ]);
 });

@@ -77,10 +77,10 @@ export function getBroadcastYearRange(date: DateTime): Interval {
 }
 
 const QUARTER_TO_MONTH: Record<number, number> = {
-  1: 1,
-  2: 4,
-  3: 7,
-  4: 10,
+  1: 2,
+  2: 5,
+  3: 8,
+  4: 11,
 };
 
 export function getBroadcastQuarterRangeFromYearQuarter({
@@ -88,7 +88,10 @@ export function getBroadcastQuarterRangeFromYearQuarter({
   quarter,
 }: YearQuarter): Interval {
   return getBroadcastQuarterRange(
-    DateTime.fromJSDate(new Date(year, QUARTER_TO_MONTH[quarter], 1))
+    DateTime.fromObject(
+      { year, month: QUARTER_TO_MONTH[quarter], day: 1 },
+      { zone: BroadcastTimeZone }
+    )
   );
 }
 
