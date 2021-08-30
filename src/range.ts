@@ -3,7 +3,7 @@ import { DateTime, Interval } from "luxon";
 import { BroadcastTimeZone, YearQuarter } from "./types";
 
 function getLastSunday(date: DateTime): DateTime {
-  return date.minus({ day: date.weekday % 7 });
+  return date.minus({ days: date.weekday % 7 });
 }
 
 export function getBroadcastWeekStart(date: DateTime): DateTime {
@@ -23,7 +23,7 @@ export function getBroadcastMonthRange(date: DateTime): Interval {
 
   if (endOfMonthDate.weekday !== 7 && date.hasSame(endOfMonthDate, "week")) {
     const start = getBroadcastWeekRange(date).start;
-    const endDate = date.plus({ month: 1 }).endOf("month");
+    const endDate = date.plus({ months: 1 }).endOf("month");
     const end = getLastSunday(endDate);
 
     return Interval.fromDateTimes(start, end);
@@ -101,7 +101,7 @@ export function getBroadcastWeeksInRange(range: Interval): Interval[] {
 
   while (weekDateRange.start <= range.end) {
     res.push(weekDateRange);
-    weekDateRange = getBroadcastWeekRange(weekDateRange.end.plus({ day: 1 }));
+    weekDateRange = getBroadcastWeekRange(weekDateRange.end.plus({ days: 1 }));
   }
 
   return res;
