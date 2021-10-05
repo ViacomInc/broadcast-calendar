@@ -18,6 +18,7 @@ const {
   getBroadcastYearsQuarters,
   getBroadcastWeek,
   getBroadcastWeekKey,
+  getBroadcastWeekKeyRange,
   getBroadcastQuarterWeek,
   makeFormatter,
   yearQuarterIsGreaterThan,
@@ -328,6 +329,26 @@ test("getBroadcastWeekKey", (t) => {
       getBroadcastWeekKey(date),
       weekKey,
       `getBroadcastWeekKey for ${dateStr} expects ${weekKey}`
+    );
+  });
+});
+
+test("getBroadcastWeekKeyRange", (t) => {
+  Object.entries(broadcastWeekKeys).map(([dateStr, weekKey]) => {
+    const { start: expectedStart, end: expectedEnd } = getBroadcastWeekRange(
+      parseDateFromISO(dateStr)
+    );
+    const { start, end } = getBroadcastWeekKeyRange(weekKey);
+
+    t.is(
+      start.toISODate(),
+      expectedStart.toISODate(),
+      `getBroadcastWeekKeyRange start date for ${weekKey} expects ${expectedStart}`
+    );
+    t.is(
+      end.toISODate(),
+      expectedEnd.toISODate(),
+      `getBroadcastWeekKeyRange end date for ${weekKey} expects ${expectedEnd}`
     );
   });
 });

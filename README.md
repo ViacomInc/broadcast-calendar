@@ -69,6 +69,7 @@ returns broadcast week key for a given date. Examples: `202103`, `202232`
 
 Set of functions that return broadcast dates `Interval` for a given date.
 
+- **getBroadcastWeekKeyRange(weekKey: number): Interval**
 - **getBroadcastWeekRange(date: DateTime): Interval**
 - **getBroadcastMonthRange(date: DateTime): Interval**
 - **getBroadcastQuarterRange(date: DateTime): Interval**

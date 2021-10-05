@@ -18,6 +18,16 @@ export function getBroadcastWeekRange(date: DateTime): Interval {
   return Interval.fromDateTimes(date.startOf("week"), date.endOf("week"));
 }
 
+export function getBroadcastWeekKeyRange(weekKey: number): Interval {
+  const broadcastYear = Math.trunc(weekKey / 100);
+  const weekNumber = weekKey % 100;
+  const { start } = getBroadcastYearRange(
+    DateTime.fromObject({ year: broadcastYear, month: 7, day: 1 })
+  );
+
+  return getBroadcastWeekRange(start.plus({ weeks: weekNumber - 1 }));
+}
+
 export function getBroadcastMonthRange(date: DateTime): Interval {
   const endOfMonthDate = date.endOf("month");
 
