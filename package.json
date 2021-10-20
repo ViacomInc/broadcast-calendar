@@ -40,6 +40,7 @@
     "@types/rollup-plugin-peer-deps-external": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
+    "ansi-regex": ">=5.0.1",
     "ava": "^3.15.0",
     "eslint": "^7.23.0",
     "eslint-config-prettier": "^8.1.0",
