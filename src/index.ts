@@ -5,3 +5,4 @@ export * from "./parse";
 export * from "./range";
 export * from "./week";
 export * from "./yearQuarter";
+export * from "./calendar";

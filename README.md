@@ -84,6 +84,7 @@ returns the array of broadcast weeks intervals for a given `range`
 
 - **parseDateFromSQL(date: string): DateTime**
 - **parseDateFromISO(date: string): DateTime**
+- **parseDateFromBroadcastWeekKey(weekKeyStr: string): DateTime**
 
 Parses string and returns `luxon` DateTime in US Broadcast calendar time zone (EST)
 
@@ -97,5 +98,17 @@ Parses string interval and returns `luxon` Interval in US Broadcast calendar tim
 - **formatBroadcastDateRange(range: Interval, format?: (date: DateTime) => string): StringInterval**
 
 Takes `Interval` instance and returns a tuple with two ISO (or with `format` function) formatted dates
+
+### Calendar
+
+- **getBroadcastCalendar(date: DateTime): BroadcastCalendar**
+
+returns all the broadcast calendar information
+
+## CLI
+
+`broadcast-calendar <ISO Date | Broadcast Week Key>`
+
+Outputs broadcast calendar data JSON for given date or broadcast week key
 
 License Apache 2.0 - see [LICENSE](./LICENSE) for more details.

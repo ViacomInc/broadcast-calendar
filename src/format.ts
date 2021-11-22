@@ -1,5 +1,10 @@
 import { DateTime, Interval } from "luxon";
-import { BroadcastTimeZone, StringInterval } from "./types";
+import {
+  BroadcastCalendar,
+  BroadcastCalendarString,
+  BroadcastTimeZone,
+  StringInterval,
+} from "./types";
 
 export const makeFormatter =
   (format: string) =>
@@ -13,4 +18,28 @@ export function formatBroadcastDateRange(
   format = dateFormat
 ): StringInterval {
   return [format(range.start), format(range.end)];
+}
+
+export function formatBroadcastCalendar({
+  date,
+  year,
+  yearInterval,
+  quarter,
+  quarterInterval,
+  monthInterval,
+  week,
+  weekKey,
+  weekInterval,
+}: BroadcastCalendar): BroadcastCalendarString {
+  return {
+    date: date.toISODate(),
+    year,
+    yearInterval: formatBroadcastDateRange(yearInterval),
+    quarter,
+    quarterInterval: formatBroadcastDateRange(quarterInterval),
+    monthInterval: formatBroadcastDateRange(monthInterval),
+    week,
+    weekInterval: formatBroadcastDateRange(weekInterval),
+    weekKey,
+  };
 }
