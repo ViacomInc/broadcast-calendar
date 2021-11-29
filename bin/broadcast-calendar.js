@@ -1,20 +1,23 @@
 #!/usr/bin/env node
 const calendar = require("../lib");
 
+const now = calendar.DateTime.now();
 const usageHelp = `
   Usage:
     broadcast-calendar <ISO Date | Broadcast Week Key>
 
   Example:
-    broadcast-calendar ${calendar.DateTime.now().toISODate()}
-    broadcast-calendar ${calendar.getBroadcastWeekKey(calendar.DateTime.now())}
+    broadcast-calendar ${now.toISODate()}
+    broadcast-calendar ${calendar.getBroadcastWeekKey(now)}
 `;
 
-const dateStr = process.argv[2];
-if (!dateStr || dateStr.length < 4) {
+const arg1 = process.argv[2];
+if (["-h", "--help"].includes(arg1)) {
   console.log(usageHelp);
   process.exit(1);
 }
+
+const dateStr = !arg1 || arg1.length < 4 ? now.toISODate() : arg1;
 
 const date =
   dateStr.length === 6

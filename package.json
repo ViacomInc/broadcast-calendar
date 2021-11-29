@@ -11,6 +11,7 @@
   "module": "./lib/index.es.js",
   "types": "./lib/index.d.ts",
   "scripts": {
+    "bin": "node ./bin/broadcast-calendar.js",
     "prebuild": "rimraf lib",
     "build": "rollup -c rollup.config.ts",
     "lint": "eslint .",

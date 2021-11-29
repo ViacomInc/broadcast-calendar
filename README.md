@@ -107,8 +107,8 @@ returns all the broadcast calendar information
 
 ## CLI
 
-`broadcast-calendar <ISO Date | Broadcast Week Key>`
+`broadcast-calendar [ISO Date | Broadcast Week Key]`
 
-Outputs broadcast calendar data JSON for given date or broadcast week key
+Outputs broadcast calendar data JSON for given date or broadcast week key. If the date or key are omited outputs calendar for today.
 
 License Apache 2.0 - see [LICENSE](./LICENSE) for more details.
