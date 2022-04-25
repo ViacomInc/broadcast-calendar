@@ -5,6 +5,7 @@ const {
   parseDateFromSQL,
   parseIntervalFromSQL,
   parseIntervalFromISO,
+  parseDateFromBroadcastWeekKey,
   formatBroadcastDateRange,
   getBroadcastWeekRange,
   getBroadcastMonthRange,
@@ -181,20 +182,20 @@ const broadcastTestData = [
   ],
 ];
 
-const broadcastWeekTestDate = [
-  ["2018-01-01", 1],
+const broadcastWeekTestDates = [
   ["2016-12-31", 1],
   ["2017-12-31", 53],
+  ["2018-01-01", 1],
   ["2018-04-30", 18],
   ["2018-05-28", 22],
   ["2018-08-27", 35],
   ["2018-12-30", 52],
   ["2018-12-31", 1],
-  ["2019-08-27", 35],
   ["2019-03-31", 13],
   ["2019-04-01", 14],
   ["2019-06-30", 26],
   ["2019-07-01", 27],
+  ["2019-08-27", 35],
   ["2019-09-29", 39],
   ["2019-09-30", 40],
   ["2019-12-29", 52],
@@ -217,11 +218,60 @@ const broadcastWeekTestDate = [
 ];
 
 test("getBroadcastWeek", (t) => {
-  broadcastWeekTestDate.forEach(([weekStart, weekNumber]) => {
+  broadcastWeekTestDates.forEach(([weekStart, weekNumber]) => {
     t.is(
       getBroadcastWeek(parseDateFromISO(weekStart)),
       weekNumber,
       `getBroadcastWeek ${weekStart}`
+    );
+  });
+});
+
+const broadcastWeekKeyTestDates = {
+  201601: "2015-12-28",
+  201753: "2017-12-25",
+  201801: "2018-01-01",
+  201818: "2018-04-30",
+  201822: "2018-05-28",
+  201835: "2018-08-27",
+  201852: "2018-12-24",
+  201901: "2018-12-31",
+  201913: "2019-03-25",
+  201914: "2019-04-01",
+  201926: "2019-06-24",
+  201927: "2019-07-01",
+  201935: "2019-08-26",
+  201939: "2019-09-23",
+  201940: "2019-09-30",
+  201952: "2019-12-23",
+  202017: "2020-04-20",
+  202018: "2020-04-27",
+  202029: "2020-07-13",
+  202052: "2020-12-21",
+  202101: "2020-12-28",
+  202127: "2021-06-28",
+  202152: "2021-12-20",
+  202201: "2021-12-27",
+  202226: "2022-06-20",
+  202227: "2022-06-27",
+  202252: "2022-12-19",
+  202353: "2023-12-25",
+  202853: "2028-12-25",
+};
+
+test("parseDateFromBroadcastWeekKey", (t) => {
+  Object.entries(broadcastWeekKeyTestDates).forEach(([weekKey, weekStart]) => {
+    // test data
+    t.is(
+      getBroadcastWeekKey(parseDateFromISO(weekStart)),
+      parseInt(weekKey, 10)
+    );
+
+    // test function
+    t.is(
+      parseDateFromBroadcastWeekKey(weekKey).toISODate(),
+      weekStart,
+      `parseDateFromBroadcastWeekKey ${weekKey}`
     );
   });
 });
@@ -275,7 +325,7 @@ test("broadcast calendar range", (t) => {
       `getBroadcastYearQuarter expects ${expected.broadcastYear} ${expected.broadcastQuarter}`
     );
 
-    const expectedWeekNubmer = broadcastWeekTestDate.find(
+    const expectedWeekNubmer = broadcastWeekTestDates.find(
       (w) => weekStr === w[0]
     );
 
