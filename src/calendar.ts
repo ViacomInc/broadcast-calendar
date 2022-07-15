@@ -1,26 +1,25 @@
 import { DateTime } from "luxon";
+import { BroadcastCalendar } from "./types";
+import { getBroadcastYear, getBroadcastQuarter } from "./yearQuarter";
 import {
-  BroadcastCalendar,
-  getBroadcastYear,
-  getBroadcastYearRange,
-  getBroadcastQuarter,
-  getBroadcastQuarterRange,
-  getBroadcastMonthRange,
-  getBroadcastWeek,
-  getBroadcastWeekRange,
-  getBroadcastWeekKey,
-} from "./index";
+  getBroadcastYearInterval,
+  getBroadcastQuarterInterval,
+  getBroadcastMonthInterval,
+  getBroadcastWeekInterval,
+} from "./interval";
+import { getBroadcastWeek } from "./week";
+import { getBroadcastWeekKey } from "./weekKey";
 
 export function getBroadcastCalendar(date: DateTime): BroadcastCalendar {
   return {
     date,
     year: getBroadcastYear(date),
-    yearInterval: getBroadcastYearRange(date),
+    yearInterval: getBroadcastYearInterval(date),
     quarter: getBroadcastQuarter(date),
-    quarterInterval: getBroadcastQuarterRange(date),
-    monthInterval: getBroadcastMonthRange(date),
+    quarterInterval: getBroadcastQuarterInterval(date),
+    monthInterval: getBroadcastMonthInterval(date),
     week: getBroadcastWeek(date),
-    weekInterval: getBroadcastWeekRange(date),
+    weekInterval: getBroadcastWeekInterval(date),
     weekKey: getBroadcastWeekKey(date),
   };
 }

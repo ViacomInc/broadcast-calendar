@@ -1,11 +1,11 @@
 import { DateTime, Interval } from "luxon";
 
 import { YearQuarter, YearQuarters } from "./types";
-import { getBroadcastYearRange } from "./range";
+import { getBroadcastYearInterval } from "./interval";
 import { getBroadcastWeek } from "./week";
 
 export function getBroadcastYear(date: DateTime): number {
-  const end = getBroadcastYearRange(date).end;
+  const end = getBroadcastYearInterval(date).end;
   return end.get("year");
 }
 

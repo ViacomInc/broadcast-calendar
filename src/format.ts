@@ -13,11 +13,11 @@ export const makeFormatter =
 
 const dateFormat = makeFormatter("yyyy-MM-dd");
 
-export function formatBroadcastDateRange(
-  range: Interval,
+export function formatBroadcastDateInterval(
+  interval: Interval,
   format = dateFormat
 ): StringInterval {
-  return [format(range.start), format(range.end)];
+  return [format(interval.start), format(interval.end)];
 }
 
 export function formatBroadcastCalendar({
@@ -34,12 +34,12 @@ export function formatBroadcastCalendar({
   return {
     date: date.toISODate(),
     year,
-    yearInterval: formatBroadcastDateRange(yearInterval),
+    yearInterval: formatBroadcastDateInterval(yearInterval),
     quarter,
-    quarterInterval: formatBroadcastDateRange(quarterInterval),
-    monthInterval: formatBroadcastDateRange(monthInterval),
+    quarterInterval: formatBroadcastDateInterval(quarterInterval),
+    monthInterval: formatBroadcastDateInterval(monthInterval),
     week,
-    weekInterval: formatBroadcastDateRange(weekInterval),
+    weekInterval: formatBroadcastDateInterval(weekInterval),
     weekKey,
   };
 }

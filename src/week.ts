@@ -1,5 +1,4 @@
 import { DateTime } from "luxon";
-import { getBroadcastYear } from "./yearQuarter";
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -32,10 +31,4 @@ export function getBroadcastWeek(date: DateTime): number {
     ((utc.valueOf() - yearStart.toMillis() + yearStartDay * DAY) / DAY + 1) / 7
   );
   return weekNo;
-}
-
-export function getBroadcastWeekKey(date: DateTime): number {
-  const broadcastYear = getBroadcastYear(date);
-  const broadcastWeek = getBroadcastWeek(date);
-  return broadcastYear * 100 + broadcastWeek;
 }

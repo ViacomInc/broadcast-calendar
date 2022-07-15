@@ -65,20 +65,20 @@ returns broadcast week number for a given date
 
 returns broadcast week key for a given date. Examples: `202103`, `202232`
 
-### Range
+### Interval
 
 Set of functions that return broadcast dates `Interval` for a given date.
 
-- **getBroadcastWeekKeyRange(weekKey: number): Interval**
-- **getBroadcastWeekRange(date: DateTime): Interval**
-- **getBroadcastMonthRange(date: DateTime): Interval**
-- **getBroadcastQuarterRange(date: DateTime): Interval**
-- **getBroadcastYearRange(date: DateTime): Interval**
-- **getBroadcastQuarterRangeFromYearQuarter({ year, quarter, }: YearQuarter): Interval**
+- **getBroadcastWeekKeyInterval(weekKey: number): Interval**
+- **getBroadcastWeekInterval(date: DateTime): Interval**
+- **getBroadcastMonthInterval(date: DateTime): Interval**
+- **getBroadcastQuarterInterval(date: DateTime): Interval**
+- **getBroadcastYearInterval(date: DateTime): Interval**
+- **getBroadcastQuarterIntervalFromYearQuarter({ year, quarter, }: YearQuarter): Interval**
 
-- **getBroadcastWeeksInRange(range: Interval): Interval[]**
+- **getBroadcastWeeksInInterval(interval: Interval): Interval[]**
 
-returns the array of broadcast weeks intervals for a given `range`
+returns the array of broadcast weeks intervals for a given `interval`
 
 ### Parse
 
@@ -88,14 +88,14 @@ returns the array of broadcast weeks intervals for a given `range`
 
 Parses string and returns `luxon` DateTime in US Broadcast calendar time zone (EST)
 
-- **parseIntervalFromSQL(range: StringInterval): Interval**
-- **parseIntervalFromISO(range: StringInterval): Interval**
+- **parseIntervalFromSQL(interval: StringInterval): Interval**
+- **parseIntervalFromISO(interval: StringInterval): Interval**
 
 Parses string interval and returns `luxon` Interval in US Broadcast calendar time zone (EST)
 
 ### Format
 
-- **formatBroadcastDateRange(range: Interval, format?: (date: DateTime) => string): StringInterval**
+- **formatBroadcastDateInterval(interval: Interval, format?: (date: DateTime) => string): StringInterval**
 
 Takes `Interval` instance and returns a tuple with two ISO (or with `format` function) formatted dates
 

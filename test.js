@@ -6,20 +6,20 @@ const {
   parseIntervalFromSQL,
   parseIntervalFromISO,
   parseDateFromBroadcastWeekKey,
-  formatBroadcastDateRange,
-  getBroadcastWeekRange,
-  getBroadcastMonthRange,
-  getBroadcastQuarterRange,
-  getBroadcastYearRange,
-  getBroadcastQuarterRangeFromYearQuarter,
-  getBroadcastWeeksInRange,
+  formatBroadcastDateInterval,
+  getBroadcastWeekInterval,
+  getBroadcastMonthInterval,
+  getBroadcastQuarterInterval,
+  getBroadcastYearInterval,
+  getBroadcastQuarterIntervalFromYearQuarter,
+  getBroadcastWeeksInInterval,
   getBroadcastYear,
   getBroadcastQuarter,
   getBroadcastYearQuarter,
   getBroadcastYearsQuarters,
   getBroadcastWeek,
   getBroadcastWeekKey,
-  getBroadcastWeekKeyRange,
+  getBroadcastWeekKeyInterval,
   getBroadcastQuarterWeek,
   makeFormatter,
   yearQuarterIsGreaterThan,
@@ -276,32 +276,35 @@ test("parseDateFromBroadcastWeekKey", (t) => {
   });
 });
 
-test("broadcast calendar range", (t) => {
+test("broadcast calendar interval", (t) => {
   broadcastTestData.forEach(([weekStr, expected]) => {
     const week = parseDateFromISO(weekStr);
 
     t.deepEqual(
-      formatBroadcastDateRange(getBroadcastWeekRange(week), testFormat),
+      formatBroadcastDateInterval(getBroadcastWeekInterval(week), testFormat),
       expected.week,
-      `getBroadcastWeekRange ${weekStr}`
+      `getBroadcastWeekInterval ${weekStr}`
     );
 
     t.deepEqual(
-      formatBroadcastDateRange(getBroadcastMonthRange(week), testFormat),
+      formatBroadcastDateInterval(getBroadcastMonthInterval(week), testFormat),
       expected.month,
-      `getBroadcastMonthRange expects ${expected.month.toString()}`
+      `getBroadcastMonthInterval expects ${expected.month.toString()}`
     );
 
     t.deepEqual(
-      formatBroadcastDateRange(getBroadcastQuarterRange(week), testFormat),
+      formatBroadcastDateInterval(
+        getBroadcastQuarterInterval(week),
+        testFormat
+      ),
       expected.quarter,
-      `getBroadcastQuarterRange expects ${expected.quarter.toString()}`
+      `getBroadcastQuarterInterval expects ${expected.quarter.toString()}`
     );
 
     t.deepEqual(
-      formatBroadcastDateRange(getBroadcastYearRange(week), testFormat),
+      formatBroadcastDateInterval(getBroadcastYearInterval(week), testFormat),
       expected.year,
-      `getBroadcastYearRange expects ${expected.year.toString()}`
+      `getBroadcastYearInterval expects ${expected.year.toString()}`
     );
 
     t.deepEqual(
@@ -336,15 +339,15 @@ test("broadcast calendar range", (t) => {
     );
 
     t.deepEqual(
-      formatBroadcastDateRange(
-        getBroadcastQuarterRangeFromYearQuarter({
+      formatBroadcastDateInterval(
+        getBroadcastQuarterIntervalFromYearQuarter({
           year: expected.broadcastYear,
           quarter: expected.broadcastQuarter,
         }),
         testFormat
       ),
       expected.quarter,
-      `getBroadcastQuarterRangeFromYearQuarter expects ${expected.quarter.toString()}`
+      `getBroadcastQuarterIntervalFromYearQuarter expects ${expected.quarter.toString()}`
     );
   });
 });
@@ -383,22 +386,22 @@ test("getBroadcastWeekKey", (t) => {
   });
 });
 
-test("getBroadcastWeekKeyRange", (t) => {
+test("getBroadcastWeekKeyInterval", (t) => {
   Object.entries(broadcastWeekKeys).map(([dateStr, weekKey]) => {
-    const { start: expectedStart, end: expectedEnd } = getBroadcastWeekRange(
+    const { start: expectedStart, end: expectedEnd } = getBroadcastWeekInterval(
       parseDateFromISO(dateStr)
     );
-    const { start, end } = getBroadcastWeekKeyRange(weekKey);
+    const { start, end } = getBroadcastWeekKeyInterval(weekKey);
 
     t.is(
       start.toISODate(),
       expectedStart.toISODate(),
-      `getBroadcastWeekKeyRange start date for ${weekKey} expects ${expectedStart}`
+      `getBroadcastWeekKeyInterval start date for ${weekKey} expects ${expectedStart}`
     );
     t.is(
       end.toISODate(),
       expectedEnd.toISODate(),
-      `getBroadcastWeekKeyRange end date for ${weekKey} expects ${expectedEnd}`
+      `getBroadcastWeekKeyInterval end date for ${weekKey} expects ${expectedEnd}`
     );
   });
 });
@@ -444,9 +447,9 @@ test("years quarters from Interval", (t) => {
   ]);
 });
 
-test("broadcast weeks in range", (t) => {
-  const range = Interval.fromISO("2021-07-23/2021-08-11");
-  const weeksIntervals = getBroadcastWeeksInRange(range).map(
+test("broadcast weeks in interval", (t) => {
+  const interval = Interval.fromISO("2021-07-23/2021-08-11");
+  const weeksIntervals = getBroadcastWeeksInInterval(interval).map(
     ({ start, end }) => ({ start: start.toISODate(), end: end.toISODate() })
   );
 
