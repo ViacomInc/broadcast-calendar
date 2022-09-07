@@ -20,7 +20,7 @@
     "format": "prettier --loglevel error --write \"./src/**/*.ts\" \"./test.js\" \"./rollup.config.ts\" \"*.md\"",
     "format:staged": "git-format-staged -f 'prettier --ignore-unknown --loglevel error --stdin --stdin-filepath \"{}\"' .",
     "prepare": "husky install",
-    "release": "release-it"
+    "release": "npm run build && release-it"
   },
   "repository": {
     "type": "git",
