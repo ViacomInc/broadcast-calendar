@@ -36,4 +36,5 @@ export type BroadcastCalendarString = {
   week: number;
   weekInterval: StringInterval;
   weekKey: number;
+  weekDay: string;
 };

@@ -41,5 +41,6 @@ export function formatBroadcastCalendar({
     week,
     weekInterval: formatBroadcastDateInterval(weekInterval),
     weekKey,
+    weekDay: date.toFormat("EEEE"),
   };
 }
