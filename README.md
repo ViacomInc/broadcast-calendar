@@ -109,7 +109,7 @@ returns all the broadcast calendar information
 
 converts broadcast date time into calendar date time.
 
-Broadcast day starts at 6am, so date `2022-07-23 03:15:00` in gregorian calendar equals to `2022-07-24 03:15:00`
+Broadcast day starts at 6am, so broadcast date `2022-07-23 03:15:00` equals to `2022-07-24 03:15:00` in gregorian calendar.
 
 ## CLI
 
