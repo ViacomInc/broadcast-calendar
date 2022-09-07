@@ -25,6 +25,7 @@ const {
   yearQuarterIsGreaterThan,
   incrementYearQuarter,
   isYearQuarter,
+  toCalendarDateTime,
 } = require("./");
 
 const testFormat = makeFormatter("yyyy-MM-dd EEE");
@@ -471,4 +472,16 @@ test("broadcast weeks in interval", (t) => {
       end: "2021-08-15",
     },
   ]);
+});
+
+test("converting from broadcast calendar to gregorian calendar", (t) => {
+  t.is(
+    toCalendarDateTime(parseDateFromSQL("2022-07-23 03:15:00")).toISODate(),
+    "2022-07-24"
+  );
+
+  t.is(
+    toCalendarDateTime(parseDateFromSQL("2022-07-23 06:15:00")).toISODate(),
+    "2022-07-23"
+  );
 });

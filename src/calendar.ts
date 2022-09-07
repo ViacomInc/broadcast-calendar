@@ -10,6 +10,10 @@ import {
 import { getBroadcastWeek } from "./week";
 import { getBroadcastWeekKey } from "./weekKey";
 
+export function toCalendarDateTime(broadcast: DateTime): DateTime {
+  return broadcast.hour < 6 ? broadcast.plus({ day: 1 }) : broadcast;
+}
+
 export function getBroadcastCalendar(date: DateTime): BroadcastCalendar {
   return {
     date,

@@ -105,6 +105,12 @@ Takes `Interval` instance and returns a tuple with two ISO (or with `format` fun
 
 returns all the broadcast calendar information
 
+- **toCalendarDateTime(broadcast: DateTime): DateTime**
+
+converts broadcast date time into calendar date time.
+
+Broadcast day starts at 6am, so date `2022-07-23 03:15:00` in gregorian calendar equals to `2022-07-24 03:15:00`
+
 ## CLI
 
 `broadcast-calendar [ISO Date | Broadcast Week Key]`
