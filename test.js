@@ -485,3 +485,10 @@ test("converting from broadcast calendar to gregorian calendar", (t) => {
     "2022-07-23"
   );
 });
+
+test("2022-12-25T23:59:59-05:00 is not 202201", (t) => {
+  t.is(
+    getBroadcastWeekKey(parseDateFromISO("2022-12-25T23:59:59-05:00")),
+    202252
+  );
+});

@@ -1,5 +1,7 @@
 import { DateTime } from "luxon";
 
+import { BroadcastTimeZone } from "./types";
+
 const DAY = 24 * 60 * 60 * 1000;
 
 function isLastWeekOverflown(date: DateTime): boolean {
@@ -12,23 +14,23 @@ function isLastWeekOverflown(date: DateTime): boolean {
 }
 
 export function getBroadcastWeek(date: DateTime): number {
-  const utc = date.toUTC().startOf("day");
+  const day = date.setZone(BroadcastTimeZone).startOf("day");
 
-  if (isLastWeekOverflown(utc)) {
+  if (isLastWeekOverflown(day)) {
     return 1;
   }
 
   const yearStart = DateTime.fromObject(
     {
-      year: utc.year,
+      year: day.year,
       month: 1,
       day: 1,
     },
-    { zone: "utc" }
+    { zone: BroadcastTimeZone }
   );
   const yearStartDay = yearStart.weekday - 1;
   const weekNo = Math.ceil(
-    ((utc.valueOf() - yearStart.toMillis() + yearStartDay * DAY) / DAY + 1) / 7
+    ((day.valueOf() - yearStart.toMillis() + yearStartDay * DAY) / DAY + 1) / 7
   );
   return weekNo;
 }
