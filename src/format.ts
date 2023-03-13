@@ -11,11 +11,24 @@ export const makeFormatter =
   (date: DateTime): string =>
     date.setZone(BroadcastTimeZone).toFormat(format);
 
-const dateFormat = makeFormatter("yyyy-MM-dd");
+export const toISODate = makeFormatter("yyyy-MM-dd");
+
+export function formatToISOWithoutTZ(datetime: DateTime): string {
+  return datetime.toISO({
+    includeOffset: false,
+    suppressMilliseconds: true,
+  });
+}
+
+export function formatToSQLWithoutTZ(datetime: DateTime): string {
+  return datetime.toSQL({
+    includeOffset: false,
+  });
+}
 
 export function formatBroadcastDateInterval(
   interval: Interval,
-  format = dateFormat
+  format = toISODate
 ): StringInterval {
   return [format(interval.start), format(interval.end)];
 }

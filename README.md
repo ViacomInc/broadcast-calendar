@@ -6,6 +6,11 @@ This is a collection of functions to help converting good ol' dates to
 _Broadcast_ dates when you need to be working in the
 [Broadcast Calendar](https://en.wikipedia.org/wiki/Broadcast_calendar).
 
+# Notes
+
+- **Broadcast calendar timezone is Eastern Time. It does have DST**
+- **You can not trust time zones during the DST switchover unless you explicitly specify the time zone.**
+
 ## Installation
 
 `npm i @viacomcbs/broadcast-calendar`
@@ -86,14 +91,19 @@ returns the array of broadcast weeks intervals for a given `interval`
 - **parseDateFromISO(date: string): DateTime**
 - **parseDateFromBroadcastWeekKey(weekKeyStr: string): DateTime**
 
-Parses string and returns `luxon` DateTime in US Broadcast calendar time zone (EST)
+Parses string and returns `luxon` DateTime in US Broadcast calendar time zone (Eastern Time)
 
 - **parseIntervalFromSQL(interval: StringInterval): Interval**
 - **parseIntervalFromISO(interval: StringInterval): Interval**
 
-Parses string interval and returns `luxon` Interval in US Broadcast calendar time zone (EST)
+Parses string interval and returns `luxon` Interval in US Broadcast calendar time zone (Eastern Time)
 
 ### Format
+
+- **formatToISOWithoutTZ(datetime: DateTime): string**
+- **formatToSQLWithoutTZ(datetime: DateTime): string**
+
+Return the string representation of DateTime but drops timezone offset
 
 - **formatBroadcastDateInterval(interval: Interval, format?: (date: DateTime) => string): StringInterval**
 

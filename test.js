@@ -1,31 +1,33 @@
 const test = require("ava");
 const {
-  Interval,
-  parseDateFromISO,
-  parseDateFromSQL,
-  parseIntervalFromSQL,
-  parseIntervalFromISO,
-  parseDateFromBroadcastWeekKey,
   formatBroadcastDateInterval,
-  getBroadcastWeekInterval,
+  formatToISOWithoutTZ,
+  formatToSQLWithoutTZ,
   getBroadcastMonthInterval,
-  getBroadcastQuarterInterval,
-  getBroadcastYearInterval,
-  getBroadcastQuarterIntervalFromYearQuarter,
-  getBroadcastWeeksInInterval,
-  getBroadcastYear,
   getBroadcastQuarter,
-  getBroadcastYearQuarter,
-  getBroadcastYearsQuarters,
+  getBroadcastQuarterInterval,
+  getBroadcastQuarterIntervalFromYearQuarter,
+  getBroadcastQuarterWeek,
   getBroadcastWeek,
+  getBroadcastWeekInterval,
   getBroadcastWeekKey,
   getBroadcastWeekKeyInterval,
-  getBroadcastQuarterWeek,
-  makeFormatter,
-  yearQuarterIsGreaterThan,
+  getBroadcastWeeksInInterval,
+  getBroadcastYear,
+  getBroadcastYearInterval,
+  getBroadcastYearQuarter,
+  getBroadcastYearsQuarters,
   incrementYearQuarter,
+  Interval,
   isYearQuarter,
+  makeFormatter,
+  parseDateFromBroadcastWeekKey,
+  parseDateFromISO,
+  parseDateFromSQL,
+  parseIntervalFromISO,
+  parseIntervalFromSQL,
   toCalendarDateTime,
+  yearQuarterIsGreaterThan,
 } = require("./");
 
 const testFormat = makeFormatter("yyyy-MM-dd EEE");
@@ -490,5 +492,19 @@ test("2022-12-25T23:59:59-05:00 is not 202201", (t) => {
   t.is(
     getBroadcastWeekKey(parseDateFromISO("2022-12-25T23:59:59-05:00")),
     202252
+  );
+});
+
+test("formatToISOWithoutTZ", (t) => {
+  t.is(
+    formatToISOWithoutTZ(parseDateFromISO("2022-12-25T23:59:59-05:00")),
+    "2022-12-25T23:59:59"
+  );
+});
+
+test("formatToSQLWithoutTZ", (t) => {
+  t.is(
+    formatToSQLWithoutTZ(parseDateFromISO("2022-12-25T23:59:59-05:00")),
+    "2022-12-25 23:59:59.000"
   );
 });
