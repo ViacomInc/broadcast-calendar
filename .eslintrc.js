@@ -1,14 +1,12 @@
 module.exports = {
-  ignorePatterns: ["node_modules", "lib"],
   plugins: ["@typescript-eslint"],
   overrides: [
     {
       env: {
-        browser: true,
         es2020: true,
         node: true,
       },
-      files: ["src/*.ts"],
+      files: ["src/**/*.ts", "tests/**/*.ts"],
       parser: "@typescript-eslint/parser",
       parserOptions: {
         project: "./tsconfig.json",
@@ -17,17 +15,36 @@ module.exports = {
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "prettier",
         "plugin:prettier/recommended",
       ],
+      rules: {
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            varsIgnorePattern: "^_",
+            argsIgnorePattern: "^_",
+            ignoreRestSiblings: true,
+          },
+        ],
+      },
     },
     {
       env: {
-        browser: true,
         es2020: true,
         node: true,
       },
       files: ["**/*.js"],
       extends: ["eslint:recommended", "plugin:prettier/recommended"],
+      parserOptions: {
+        sourceType: "module",
+      },
+      globals: {
+        step: "readonly",
+        gauge: "readonly",
+        beforeSuite: "readonly",
+        afterSuite: "readonly",
+      },
     },
   ],
 };

@@ -1,9 +1,9 @@
-import autoExternal from "rollup-plugin-auto-external";
+import externals from "rollup-plugin-node-externals";
+import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
 import typescript from "rollup-plugin-typescript2";
 
 const pkg = require("./package.json");
-
-const isProd = process.env.NODE_ENV === "production";
 
 export default {
   input: "src/index.ts",
@@ -21,8 +21,5 @@ export default {
       exports: "named",
     },
   ],
-  plugins: [
-    autoExternal(),
-    typescript({ clean: true, rollupCommonJSResolveHack: false }),
-  ],
+  plugins: [externals(), typescript(), resolve(), commonjs()],
 };
