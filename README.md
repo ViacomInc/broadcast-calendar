@@ -9,6 +9,7 @@ _Broadcast_ dates when you need to be working in the
 # Notes
 
 - **Broadcast calendar timezone is Eastern Time. It does have DST**
+- **All functinons expect `DateTime` passed as an argument to be in Eastern Time Zone. Use `parse_` functions when possible.**
 - **You can not trust time zones during the DST switchover unless you explicitly specify the time zone.**
 
 ## Installation
@@ -18,6 +19,23 @@ _Broadcast_ dates when you need to be working in the
 This library uses [luxon](https://moment.github.io/luxon/) to work with dates.
 
 ## Usage
+
+### Broadcast Time Zone
+
+**All functinons expect `DateTime` passed as an argument to be in Eastern Time Zone. Use `parse_` functions when possible.**
+
+```ts
+import {
+  DateTime,
+  BroadcastTimeZone,
+  parseDateFromISO,
+} from "@viacomcbs/broadcast-calendar";
+
+const dateTime1 = parseDateFromISO("2022-12-26");
+const dateTime2 = DateTime.fromISO("2022-12-26", { zone: BroadcastTimeZone });
+
+// dateTime1 is the same as dateTime2
+```
 
 ### Year Quarter
 
