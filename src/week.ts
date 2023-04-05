@@ -1,5 +1,7 @@
 import { DateTime } from "luxon";
 
+import { isValid } from "./helpers";
+
 const DAY = 24 * 60 * 60 * 1000;
 
 function isLastWeekOverflown(date: DateTime): boolean {
@@ -11,7 +13,11 @@ function isLastWeekOverflown(date: DateTime): boolean {
   return yearEnd.toMillis() - date.toMillis() <= yearEndWeekDay * DAY;
 }
 
-export function getBroadcastWeek(date: DateTime): number {
+export function getBroadcastWeek(date: DateTime): null | number {
+  if (!isValid(date)) {
+    return null;
+  }
+
   const day = date.startOf("day");
 
   if (isLastWeekOverflown(day)) {

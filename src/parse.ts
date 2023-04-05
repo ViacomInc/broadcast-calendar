@@ -1,6 +1,7 @@
 import { DateTime, Interval } from "luxon";
 import { BroadcastTimeZone, StringInterval } from "./types";
 import { getBroadcastYearInterval } from "./interval";
+import { isValid } from "./helpers";
 
 export function parseDateFromSQL(date: string): DateTime {
   return DateTime.fromSQL(date, { zone: BroadcastTimeZone });
@@ -24,13 +25,19 @@ export function parseIntervalFromISO(interval: StringInterval): Interval {
   );
 }
 
-export function parseDateFromBroadcastWeekKey(weekKeyStr: string): DateTime {
+export function parseDateFromBroadcastWeekKey(
+  weekKeyStr: string
+): null | DateTime {
   const weekKey = parseInt(weekKeyStr, 10);
   const broadcastYear = Math.trunc(weekKey / 100);
   const weekNumber = weekKey % 100;
-  const { start } = getBroadcastYearInterval(
+  const yearInterval = getBroadcastYearInterval(
     DateTime.fromObject({ year: broadcastYear, month: 7, day: 1 })
   );
 
-  return start.plus({ weeks: weekNumber - 1 });
+  if (!yearInterval || !isValid(yearInterval?.start)) {
+    return null;
+  }
+
+  return yearInterval.start.plus({ weeks: weekNumber - 1 });
 }

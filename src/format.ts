@@ -13,14 +13,14 @@ export const makeFormatter =
 
 export const toISODate = makeFormatter("yyyy-MM-dd");
 
-export function formatToISOWithoutTZ(datetime: DateTime): string {
+export function formatToISOWithoutTZ(datetime: DateTime): string | null {
   return datetime.toISO({
     includeOffset: false,
     suppressMilliseconds: true,
   });
 }
 
-export function formatToSQLWithoutTZ(datetime: DateTime): string {
+export function formatToSQLWithoutTZ(datetime: DateTime): string | null {
   return datetime.toSQL({
     includeOffset: false,
   });
@@ -29,7 +29,11 @@ export function formatToSQLWithoutTZ(datetime: DateTime): string {
 export function formatBroadcastDateInterval(
   interval: Interval,
   format = toISODate
-): StringInterval {
+): StringInterval | null {
+  if (!interval.start || !interval.end) {
+    return null;
+  }
+
   return [format(interval.start), format(interval.end)];
 }
 
@@ -47,12 +51,13 @@ export function formatBroadcastCalendar({
   return {
     date: date.toISODate(),
     year,
-    yearInterval: formatBroadcastDateInterval(yearInterval),
+    yearInterval: yearInterval && formatBroadcastDateInterval(yearInterval),
     quarter,
-    quarterInterval: formatBroadcastDateInterval(quarterInterval),
-    monthInterval: formatBroadcastDateInterval(monthInterval),
+    quarterInterval:
+      quarterInterval && formatBroadcastDateInterval(quarterInterval),
+    monthInterval: monthInterval && formatBroadcastDateInterval(monthInterval),
     week,
-    weekInterval: formatBroadcastDateInterval(weekInterval),
+    weekInterval: weekInterval && formatBroadcastDateInterval(weekInterval),
     weekKey,
     weekDay: date.toFormat("EEEE"),
   };

@@ -46,27 +46,27 @@ type YearQuarter = {
 };
 ```
 
-- **isYearQuarter(yq?: YearQuarter): yq is YearQuarter**
+- **isYearQuarter(yq?: unknown): yq is YearQuarter**
 
 `YearQuarter` type guard function
 
-- **getBroadcastYear(date: DateTime): number**
+- **getBroadcastYear(date: DateTime): null | number**
 
 returns broadcast year for a given date
 
-- **getBroadcastQuarter(date: DateTime): number**
+- **getBroadcastQuarter(date: DateTime): null | number**
 
 returns broadcast quarter for a given date
 
-- **getBroadcastQuarterWeek(date: DateTime): [number, number]**
+- **getBroadcastQuarterWeek(date: DateTime): null | [number, number]**
 
 returns `[quarter, week]` numbers for a given date
 
-- **getBroadcastYearQuarter(date: DateTime): YearQuarter**
+- **getBroadcastYearQuarter(date: DateTime): null | YearQuarter**
 
 returns broadcast year and quarter for a given date
 
-- **getBroadcastYearsQuarters(Interval): YearQuarters**
+- **getBroadcastYearsQuarters(Interval): null | YearQuarters[]**
 
 returns array of broadcast years and quarters for a given dates interval
 
@@ -78,13 +78,21 @@ increments quarter (and year if needed) for a given year quarter
 
 return true if a is greater than b
 
+- **yearQuarterToInteger(value: YearQuarter): null | number**
+
+returns an interger reperesention of YearQuarter type, like 20221
+
+- **integerToYearQuarter(value: number): null | YearQuarter**
+
+take an interger reperesention of Year Quarter, like 20221 and return YearQuarter type or null if integer is incorrect
+
 ### Week
 
-- **getBroadcastWeek(date: DateTime): number**
+- **getBroadcastWeek(date: DateTime): null | number**
 
 returns broadcast week number for a given date
 
-- **getBroadcastWeekKey(date: DateTime): number**
+- **getBroadcastWeekKey(date: DateTime): null | number**
 
 returns broadcast week key for a given date. Examples: `202103`, `202232`
 
@@ -93,13 +101,13 @@ returns broadcast week key for a given date. Examples: `202103`, `202232`
 Set of functions that return broadcast dates `Interval` for a given date.
 
 - **getBroadcastWeekKeyInterval(weekKey: number): Interval**
-- **getBroadcastWeekInterval(date: DateTime): Interval**
-- **getBroadcastMonthInterval(date: DateTime): Interval**
-- **getBroadcastQuarterInterval(date: DateTime): Interval**
-- **getBroadcastYearInterval(date: DateTime): Interval**
-- **getBroadcastQuarterIntervalFromYearQuarter({ year, quarter, }: YearQuarter): Interval**
+- **getBroadcastWeekInterval(date: DateTime): null | Interval**
+- **getBroadcastMonthInterval(date: DateTime): null | Interval**
+- **getBroadcastQuarterInterval(date: DateTime): null | Interval**
+- **getBroadcastYearInterval(date: DateTime): null | Interval**
+- **getBroadcastQuarterIntervalFromYearQuarter({ year, quarter, }: YearQuarter): null | Interval**
 
-- **getBroadcastWeeksInInterval(interval: Interval): Interval[]**
+- **getBroadcastWeeksInInterval(interval: Interval): null | Interval[]**
 
 returns the array of broadcast weeks intervals for a given `interval`
 
@@ -107,7 +115,7 @@ returns the array of broadcast weeks intervals for a given `interval`
 
 - **parseDateFromSQL(date: string): DateTime**
 - **parseDateFromISO(date: string): DateTime**
-- **parseDateFromBroadcastWeekKey(weekKeyStr: string): DateTime**
+- **parseDateFromBroadcastWeekKey(weekKeyStr: string): null | DateTime**
 
 Parses string and returns `luxon` DateTime in US Broadcast calendar time zone (Eastern Time)
 
@@ -118,12 +126,12 @@ Parses string interval and returns `luxon` Interval in US Broadcast calendar tim
 
 ### Format
 
-- **formatToISOWithoutTZ(datetime: DateTime): string**
-- **formatToSQLWithoutTZ(datetime: DateTime): string**
+- **formatToISOWithoutTZ(datetime: DateTime): null | string**
+- **formatToSQLWithoutTZ(datetime: DateTime): null | string**
 
 Return the string representation of DateTime but drops timezone offset
 
-- **formatBroadcastDateInterval(interval: Interval, format?: (date: DateTime) => string): StringInterval**
+- **formatBroadcastDateInterval(interval: Interval, format?: (date: DateTime) => string): null | StringInterval**
 
 Takes `Interval` instance and returns a tuple with two ISO (or with `format` function) formatted dates
 

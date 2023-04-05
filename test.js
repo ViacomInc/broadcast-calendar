@@ -28,6 +28,8 @@ const {
   parseIntervalFromSQL,
   toCalendarDateTime,
   yearQuarterIsGreaterThan,
+  yearQuarterToInteger,
+  integerToYearQuarter,
 } = require("./");
 
 const testFormat = makeFormatter("yyyy-MM-dd EEE");
@@ -351,6 +353,20 @@ test("broadcast calendar interval", (t) => {
       ),
       expected.quarter,
       `getBroadcastQuarterIntervalFromYearQuarter expects ${expected.quarter.toString()}`
+    );
+
+    const yearQuarter = yearQuarterToInteger({
+      year: expected.broadcastYear,
+      quarter: expected.broadcastQuarter,
+    });
+
+    t.deepEqual(
+      integerToYearQuarter(yearQuarter),
+      {
+        year: expected.broadcastYear,
+        quarter: expected.broadcastQuarter,
+      },
+      `yearQuarterToInteger matches integerToYearQuarter`
     );
   });
 });
