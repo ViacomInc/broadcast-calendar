@@ -65,17 +65,13 @@ export function getBroadcastYearsQuarters({
   );
 }
 
-export function isYearQuarter(yq?: YearQuarter): yq is YearQuarter {
-  if (
-    !yq ||
-    typeof yq !== "object" ||
-    typeof yq.year !== "number" ||
-    typeof yq.quarter !== "number"
-  ) {
-    return false;
-  }
-
-  return true;
+export function isYearQuarter(yq: unknown): yq is YearQuarter {
+  return Boolean(
+    yq &&
+      typeof yq === "object" &&
+      typeof (yq as YearQuarter).year === "number" &&
+      typeof (yq as YearQuarter).quarter === "number"
+  );
 }
 
 export function incrementYearQuarter(
