@@ -123,6 +123,14 @@ export function getBroadcastYearInterval(date: DateTime): null | Interval {
   return Interval.fromDateTimes(start, end);
 }
 
+export function getBroadcastYearIntervalFromYear(
+  year: number
+): null | Interval {
+  return getBroadcastYearInterval(
+    DateTime.fromObject({ year, month: 7, day: 1 }, { zone: BroadcastTimeZone })
+  );
+}
+
 const QUARTER_TO_MONTH: Record<number, number> = {
   1: 2,
   2: 5,

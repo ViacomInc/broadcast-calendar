@@ -105,6 +105,7 @@ Set of functions that return broadcast dates `Interval` for a given date.
 - **getBroadcastMonthInterval(date: DateTime): null | Interval**
 - **getBroadcastQuarterInterval(date: DateTime): null | Interval**
 - **getBroadcastYearInterval(date: DateTime): null | Interval**
+- **getBroadcastYearIntervalFromYear(year: number): null | Interval**
 - **getBroadcastQuarterIntervalFromYearQuarter({ year, quarter, }: YearQuarter): null | Interval**
 
 - **getBroadcastWeeksInInterval(interval: Interval): null | Interval[]**
