@@ -44,11 +44,11 @@ test("parsing dates", (t) => {
 test("parsing intervals", (t) => {
   t.is(
     parseIntervalFromSQL(["2021-07-23 03:15:00", "2021-08-11"]).isValid,
-    true
+    true,
   );
   t.is(
     parseIntervalFromISO(["2021-07-23T03:15:00", "2021-08-11"]).isValid,
-    true
+    true,
   );
 });
 
@@ -227,7 +227,7 @@ test("getBroadcastWeek", (t) => {
     t.is(
       getBroadcastWeek(parseDateFromISO(weekStart)),
       weekNumber,
-      `getBroadcastWeek ${weekStart}`
+      `getBroadcastWeek ${weekStart}`,
     );
   });
 });
@@ -269,14 +269,14 @@ test("parseDateFromBroadcastWeekKey", (t) => {
     // test data
     t.is(
       getBroadcastWeekKey(parseDateFromISO(weekStart)),
-      parseInt(weekKey, 10)
+      parseInt(weekKey, 10),
     );
 
     // test function
     t.is(
       parseDateFromBroadcastWeekKey(weekKey).toISODate(),
       weekStart,
-      `parseDateFromBroadcastWeekKey ${weekKey}`
+      `parseDateFromBroadcastWeekKey ${weekKey}`,
     );
   });
 });
@@ -288,40 +288,40 @@ test("broadcast calendar interval", (t) => {
     t.deepEqual(
       formatBroadcastDateInterval(getBroadcastWeekInterval(week), testFormat),
       expected.week,
-      `getBroadcastWeekInterval ${weekStr}`
+      `getBroadcastWeekInterval ${weekStr}`,
     );
 
     t.deepEqual(
       formatBroadcastDateInterval(getBroadcastMonthInterval(week), testFormat),
       expected.month,
-      `getBroadcastMonthInterval expects ${expected.month.toString()}`
+      `getBroadcastMonthInterval expects ${expected.month.toString()}`,
     );
 
     t.deepEqual(
       formatBroadcastDateInterval(
         getBroadcastQuarterInterval(week),
-        testFormat
+        testFormat,
       ),
       expected.quarter,
-      `getBroadcastQuarterInterval expects ${expected.quarter.toString()}`
+      `getBroadcastQuarterInterval expects ${expected.quarter.toString()}`,
     );
 
     t.deepEqual(
       formatBroadcastDateInterval(getBroadcastYearInterval(week), testFormat),
       expected.year,
-      `getBroadcastYearInterval expects ${expected.year.toString()}`
+      `getBroadcastYearInterval expects ${expected.year.toString()}`,
     );
 
     t.deepEqual(
       getBroadcastYear(week),
       expected.broadcastYear,
-      `getBroadcastYear expects ${expected.broadcastYear}`
+      `getBroadcastYear expects ${expected.broadcastYear}`,
     );
 
     t.deepEqual(
       getBroadcastQuarter(week),
       expected.broadcastQuarter,
-      `getBroadcastQuarter expects ${expected.broadcastQuarter}`
+      `getBroadcastQuarter expects ${expected.broadcastQuarter}`,
     );
 
     t.deepEqual(
@@ -330,17 +330,17 @@ test("broadcast calendar interval", (t) => {
         year: expected.broadcastYear,
         quarter: expected.broadcastQuarter,
       },
-      `getBroadcastYearQuarter expects ${expected.broadcastYear} ${expected.broadcastQuarter}`
+      `getBroadcastYearQuarter expects ${expected.broadcastYear} ${expected.broadcastQuarter}`,
     );
 
     const expectedWeekNubmer = broadcastWeekTestDates.find(
-      (w) => weekStr === w[0]
+      (w) => weekStr === w[0],
     );
 
     t.deepEqual(
       getBroadcastQuarterWeek(parseDateFromISO(week)),
       [expected.broadcastQuarter, expectedWeekNubmer[1]],
-      `getBroadcastQuarterWeek ${week} expects [${expected.broadcastQuarter} ${expectedWeekNubmer[1]}]`
+      `getBroadcastQuarterWeek ${week} expects [${expected.broadcastQuarter} ${expectedWeekNubmer[1]}]`,
     );
 
     t.deepEqual(
@@ -349,10 +349,10 @@ test("broadcast calendar interval", (t) => {
           year: expected.broadcastYear,
           quarter: expected.broadcastQuarter,
         }),
-        testFormat
+        testFormat,
       ),
       expected.quarter,
-      `getBroadcastQuarterIntervalFromYearQuarter expects ${expected.quarter.toString()}`
+      `getBroadcastQuarterIntervalFromYearQuarter expects ${expected.quarter.toString()}`,
     );
 
     const yearQuarter = yearQuarterToInteger({
@@ -366,7 +366,7 @@ test("broadcast calendar interval", (t) => {
         year: expected.broadcastYear,
         quarter: expected.broadcastQuarter,
       },
-      `yearQuarterToInteger matches integerToYearQuarter`
+      `yearQuarterToInteger matches integerToYearQuarter`,
     );
   });
 });
@@ -400,7 +400,7 @@ test("getBroadcastWeekKey", (t) => {
     t.is(
       getBroadcastWeekKey(date),
       weekKey,
-      `getBroadcastWeekKey for ${dateStr} expects ${weekKey}`
+      `getBroadcastWeekKey for ${dateStr} expects ${weekKey}`,
     );
   });
 });
@@ -408,19 +408,19 @@ test("getBroadcastWeekKey", (t) => {
 test("getBroadcastWeekKeyInterval", (t) => {
   Object.entries(broadcastWeekKeys).map(([dateStr, weekKey]) => {
     const { start: expectedStart, end: expectedEnd } = getBroadcastWeekInterval(
-      parseDateFromISO(dateStr)
+      parseDateFromISO(dateStr),
     );
     const { start, end } = getBroadcastWeekKeyInterval(weekKey);
 
     t.is(
       start.toISODate(),
       expectedStart.toISODate(),
-      `getBroadcastWeekKeyInterval start date for ${weekKey} expects ${expectedStart}`
+      `getBroadcastWeekKeyInterval start date for ${weekKey} expects ${expectedStart}`,
     );
     t.is(
       end.toISODate(),
       expectedEnd.toISODate(),
-      `getBroadcastWeekKeyInterval end date for ${weekKey} expects ${expectedEnd}`
+      `getBroadcastWeekKeyInterval end date for ${weekKey} expects ${expectedEnd}`,
     );
   });
 });
@@ -469,7 +469,7 @@ test("years quarters from Interval", (t) => {
 test("broadcast weeks in interval", (t) => {
   const interval = Interval.fromISO("2021-07-23/2021-08-11");
   const weeksIntervals = getBroadcastWeeksInInterval(interval).map(
-    ({ start, end }) => ({ start: start.toISODate(), end: end.toISODate() })
+    ({ start, end }) => ({ start: start.toISODate(), end: end.toISODate() }),
   );
 
   t.deepEqual(weeksIntervals, [
@@ -495,32 +495,32 @@ test("broadcast weeks in interval", (t) => {
 test("converting from broadcast calendar to gregorian calendar", (t) => {
   t.is(
     toCalendarDateTime(parseDateFromSQL("2022-07-23 03:15:00")).toISODate(),
-    "2022-07-24"
+    "2022-07-24",
   );
 
   t.is(
     toCalendarDateTime(parseDateFromSQL("2022-07-23 06:15:00")).toISODate(),
-    "2022-07-23"
+    "2022-07-23",
   );
 });
 
 test("2022-12-25T23:59:59-05:00 is not 202201", (t) => {
   t.is(
     getBroadcastWeekKey(parseDateFromISO("2022-12-25T23:59:59-05:00")),
-    202252
+    202252,
   );
 });
 
 test("formatToISOWithoutTZ", (t) => {
   t.is(
     formatToISOWithoutTZ(parseDateFromISO("2022-12-25T23:59:59-05:00")),
-    "2022-12-25T23:59:59"
+    "2022-12-25T23:59:59",
   );
 });
 
 test("formatToSQLWithoutTZ", (t) => {
   t.is(
     formatToSQLWithoutTZ(parseDateFromISO("2022-12-25T23:59:59-05:00")),
-    "2022-12-25 23:59:59.000"
+    "2022-12-25 23:59:59.000",
   );
 });

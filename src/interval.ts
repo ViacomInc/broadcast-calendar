@@ -1,25 +1,38 @@
 import { DateTime, Interval } from "luxon";
 
 import { BroadcastTimeZone, YearQuarter } from "./types";
-import { isValid } from "./helpers";
+import { IfValid, isValid } from "./helpers";
 
-function getLastSunday(date: DateTime): DateTime {
+function getLastSunday<IsValid extends boolean>(
+  date: DateTime<IsValid>,
+): DateTime<IsValid> {
   return date.minus({ days: date.weekday % 7 });
 }
 
-export function getBroadcastWeekStart(date: DateTime): DateTime {
+export function getBroadcastWeekStart<IsValid extends boolean>(
+  date: DateTime<IsValid>,
+): DateTime<IsValid> {
   return date.startOf("week");
 }
 
-export function getBroadcastWeekEnd(date: DateTime): DateTime {
+export function getBroadcastWeekEnd<IsValid extends boolean>(
+  date: DateTime<IsValid>,
+): DateTime<IsValid> {
   return date.endOf("week");
 }
 
-export function getBroadcastWeekInterval(date: DateTime): Interval {
-  return Interval.fromDateTimes(date.startOf("week"), date.endOf("week"));
+export function getBroadcastWeekInterval<IsValid extends boolean>(
+  date: DateTime<IsValid>,
+): Interval<IsValid> {
+  return Interval.fromDateTimes(
+    date.startOf("week"),
+    date.endOf("week"),
+  ) as Interval<IsValid>;
 }
 
-export function getBroadcastWeekKeyInterval(weekKey: number): null | Interval {
+export function getBroadcastWeekKeyInterval(
+  weekKey: number,
+): null | Interval<true> {
   const broadcastYear = Math.trunc(weekKey / 100);
   const weekNumber = weekKey % 100;
   const middleYear = DateTime.fromObject({
@@ -40,7 +53,9 @@ export function getBroadcastWeekKeyInterval(weekKey: number): null | Interval {
   return getBroadcastWeekInterval(start.plus({ weeks: weekNumber - 1 }));
 }
 
-export function getBroadcastMonthInterval(date: DateTime): null | Interval {
+export function getBroadcastMonthInterval<IsValid extends boolean>(
+  date: DateTime<IsValid>,
+): IfValid<IsValid, Interval<IsValid>> {
   const endOfMonthDate = date.endOf("month");
 
   if (endOfMonthDate.weekday !== 7 && date.hasSame(endOfMonthDate, "week")) {
@@ -49,10 +64,13 @@ export function getBroadcastMonthInterval(date: DateTime): null | Interval {
     const end = getLastSunday(endDate);
 
     if (!isValid(start) || !isValid(end)) {
-      return null;
+      return null as IfValid<IsValid, Interval<IsValid>>;
     }
 
-    return Interval.fromDateTimes(start, end);
+    return Interval.fromDateTimes(start, end) as IfValid<
+      IsValid,
+      Interval<IsValid>
+    >;
   }
 
   const startDate = date.startOf("month");
@@ -60,22 +78,30 @@ export function getBroadcastMonthInterval(date: DateTime): null | Interval {
   const end = getLastSunday(endOfMonthDate);
 
   if (!isValid(start) || !isValid(end)) {
-    return null;
+    return null as IfValid<IsValid, Interval<IsValid>>;
   }
 
-  return Interval.fromDateTimes(start, end);
+  return Interval.fromDateTimes(start, end) as IfValid<
+    IsValid,
+    Interval<IsValid>
+  >;
 }
 
-export function getBroadcastQuarterInterval(date: DateTime): null | Interval {
+export function getBroadcastQuarterInterval<IsValid extends boolean>(
+  date: DateTime<IsValid>,
+): IfValid<IsValid, Interval<IsValid>> {
   const { start: weekStart, end: weekEnd } = getBroadcastWeekInterval(date);
 
   if (!isValid(weekStart) || !isValid(weekEnd)) {
-    return null;
+    return null as IfValid<IsValid, Interval<IsValid>>;
   }
 
   if (!weekStart.hasSame(weekEnd, "year")) {
     const end = getLastSunday(date.plus({ months: 3 }).endOf("month"));
-    return Interval.fromDateTimes(weekStart, end);
+    return Interval.fromDateTimes(weekStart, end) as IfValid<
+      IsValid,
+      Interval<IsValid>
+    >;
   }
 
   const quarterDate = weekStart.hasSame(weekEnd, "month") ? date : weekEnd;
@@ -89,45 +115,57 @@ export function getBroadcastQuarterInterval(date: DateTime): null | Interval {
       month: quarterStartMonth,
       day: 1,
     },
-    { zone: BroadcastTimeZone }
+    { zone: BroadcastTimeZone },
   );
 
   const start = getBroadcastWeekInterval(startOfQuarterDate).start;
   const end = getLastSunday(
-    startOfQuarterDate.plus({ months: 2 }).endOf("month")
+    startOfQuarterDate.plus({ months: 2 }).endOf("month"),
   );
 
   if (!isValid(start) || !isValid(end)) {
-    return null;
+    return null as IfValid<IsValid, Interval<IsValid>>;
   }
 
-  return Interval.fromDateTimes(start, end);
+  return Interval.fromDateTimes(start, end) as IfValid<
+    IsValid,
+    Interval<IsValid>
+  >;
 }
 
-export function getBroadcastYearInterval(date: DateTime): null | Interval {
+export function getBroadcastYearInterval<IsValid extends boolean>(
+  date: DateTime<IsValid>,
+): IfValid<IsValid, Interval<IsValid>> {
   const { start: weekStart, end: weekEnd } = getBroadcastWeekInterval(date);
   if (!isValid(weekStart) || !isValid(weekEnd)) {
-    return null;
+    return null as IfValid<IsValid, Interval<IsValid>>;
   }
 
   const end = getLastSunday(weekEnd.endOf("year"));
   if (!weekStart.hasSame(weekEnd, "year")) {
-    return Interval.fromDateTimes(weekStart, end);
+    return Interval.fromDateTimes(weekStart, end) as IfValid<
+      IsValid,
+      Interval<IsValid>
+    >;
   }
 
   const start = getBroadcastWeekInterval(date.startOf("year")).start;
   if (!isValid(start)) {
-    return null;
+    return null as IfValid<IsValid, Interval<IsValid>>;
   }
 
-  return Interval.fromDateTimes(start, end);
+  return Interval.fromDateTimes(start, end) as IfValid<
+    IsValid,
+    Interval<IsValid>
+  >;
 }
 
-export function getBroadcastYearIntervalFromYear(
-  year: number
-): null | Interval {
+export function getBroadcastYearIntervalFromYear(year: number) {
   return getBroadcastYearInterval(
-    DateTime.fromObject({ year, month: 7, day: 1 }, { zone: BroadcastTimeZone })
+    DateTime.fromObject(
+      { year, month: 7, day: 1 },
+      { zone: BroadcastTimeZone },
+    ),
   );
 }
 
@@ -145,17 +183,17 @@ export function getBroadcastQuarterIntervalFromYearQuarter({
   return getBroadcastQuarterInterval(
     DateTime.fromObject(
       { year, month: QUARTER_TO_MONTH[quarter], day: 1 },
-      { zone: BroadcastTimeZone }
-    )
+      { zone: BroadcastTimeZone },
+    ),
   );
 }
 
-export function getBroadcastWeeksInInterval({
+export function getBroadcastWeeksInInterval<IsValid extends boolean>({
   start,
   end,
-}: Interval): null | Interval[] {
+}: Interval<IsValid>): IfValid<IsValid, Interval<IsValid>[]> {
   if (!isValid(start) || !isValid(end)) {
-    return null;
+    return null as IfValid<IsValid, Interval<IsValid>[]>;
   }
 
   const res: Interval[] = [];
@@ -168,9 +206,9 @@ export function getBroadcastWeeksInInterval({
   ) {
     res.push(weekDateInterval);
     weekDateInterval = getBroadcastWeekInterval(
-      weekDateInterval.end.plus({ days: 1 })
+      weekDateInterval.end.plus({ days: 1 }),
     );
   }
 
-  return res;
+  return res as IfValid<IsValid, Interval<IsValid>[]>;
 }

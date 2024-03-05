@@ -1,5 +1,4 @@
 import { DateTime } from "luxon";
-import { BroadcastCalendar } from "./types";
 import { getBroadcastYear, getBroadcastQuarter } from "./yearQuarter";
 import {
   getBroadcastYearInterval,
@@ -10,11 +9,15 @@ import {
 import { getBroadcastWeek } from "./week";
 import { getBroadcastWeekKey } from "./weekKey";
 
-export function toCalendarDateTime(broadcast: DateTime): DateTime {
+export function toCalendarDateTime<IsValid extends boolean>(
+  broadcast: DateTime<IsValid>,
+): DateTime<IsValid> {
   return broadcast.hour < 6 ? broadcast.plus({ day: 1 }) : broadcast;
 }
 
-export function getBroadcastCalendar(date: DateTime): BroadcastCalendar {
+export function getBroadcastCalendar<IsValid extends boolean>(
+  date: DateTime<IsValid>,
+) {
   return {
     date,
     year: getBroadcastYear(date),
@@ -27,3 +30,7 @@ export function getBroadcastCalendar(date: DateTime): BroadcastCalendar {
     weekKey: getBroadcastWeekKey(date),
   };
 }
+
+export type BroadcastCalendar<IsValid extends boolean> = ReturnType<
+  typeof getBroadcastCalendar<IsValid>
+>;

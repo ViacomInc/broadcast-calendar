@@ -3,65 +3,72 @@ import { DateTime, Interval } from "luxon";
 import { YearQuarter, YearQuarters } from "./types";
 import { getBroadcastYearInterval } from "./interval";
 import { getBroadcastWeek } from "./week";
-import { isValid } from "./helpers";
+import { IfValid, isValid } from "./helpers";
 
-export function getBroadcastYear(date: DateTime): null | number {
+export function getBroadcastYear<IsValid extends boolean>(
+  date: DateTime<IsValid>,
+): IfValid<IsValid, number> {
   const yearInterval = getBroadcastYearInterval(date);
 
   if (!(yearInterval && isValid(yearInterval.end))) {
-    return null;
+    return null as IfValid<IsValid, number>;
   }
 
-  return yearInterval.end.get("year");
+  return yearInterval.end.get("year") as IfValid<IsValid, number>;
 }
 
-export function getBroadcastQuarter(date: DateTime): null | number {
+export function getBroadcastQuarter<IsValid extends boolean>(
+  date: DateTime<IsValid>,
+): IfValid<IsValid, number> {
   const week = getBroadcastWeek(date);
   if (!isValid(date) || week === null) {
-    return null;
+    return null as IfValid<IsValid, number>;
   }
 
   const quarterLength = 13;
-  return Math.min(Math.ceil(week / quarterLength), 4);
+  return Math.min(Math.ceil(week / quarterLength), 4) as IfValid<
+    IsValid,
+    number
+  >;
 }
 
-export function getBroadcastQuarterWeek(
-  date: DateTime
-): null | [number, number] {
+export function getBroadcastQuarterWeek<IsValid extends boolean>(
+  date: DateTime<IsValid>,
+): IfValid<IsValid, [number, number]> {
   const week = getBroadcastWeek(date);
   if (!isValid(date) || week === null) {
-    return null;
+    return null as IfValid<IsValid, [number, number]>;
   }
 
   const quarterLength = 13;
   const quarter = Math.min(Math.ceil(week / quarterLength), 4);
-  return [quarter, week];
+  return [quarter, week] as IfValid<IsValid, [number, number]>;
 }
 
-export function getBroadcastYearQuarter(date: DateTime): null | YearQuarter {
+export function getBroadcastYearQuarter<IsValid extends boolean>(
+  date: DateTime<IsValid>,
+): IfValid<IsValid, YearQuarter> {
   const year = getBroadcastYear(date);
   const quarter = getBroadcastQuarter(date);
 
   if (year === null || quarter === null) {
-    return null;
+    return null as IfValid<IsValid, YearQuarter>;
   }
 
-  return { year, quarter };
+  return { year, quarter } as IfValid<IsValid, YearQuarter>;
 }
 
-export function getBroadcastYearsQuarters({
+export function getBroadcastYearsQuarters<IsValid extends boolean>({
   start,
   end,
-}: Interval): null | YearQuarters[] {
+}: Interval<IsValid>): IfValid<IsValid, YearQuarters[]> {
   if (!isValid(start) || !isValid(end)) {
-    return null;
+    return null as IfValid<IsValid, YearQuarters[]>;
   }
 
   // we just cheked that both dates are correct
-  const startDateYearQuarter = getBroadcastYearQuarter(start) as YearQuarter;
-  const endDateYearQuarter = incrementYearQuarter(
-    getBroadcastYearQuarter(end) as YearQuarter
-  );
+  const startDateYearQuarter = getBroadcastYearQuarter(start);
+  const endDateYearQuarter = incrementYearQuarter(getBroadcastYearQuarter(end));
 
   let currentYearQuarter = startDateYearQuarter;
   const yearQuarters = [];
@@ -75,7 +82,7 @@ export function getBroadcastYearsQuarters({
     yearQuarters.reduce(
       (
         acc: { [key: number]: YearQuarters },
-        { year, quarter }: YearQuarter
+        { year, quarter }: YearQuarter,
       ) => {
         if (!acc[year]) {
           acc[year] = {
@@ -87,9 +94,9 @@ export function getBroadcastYearsQuarters({
         acc[year].quarters.push(quarter);
         return acc;
       },
-      {}
-    )
-  );
+      {},
+    ),
+  ) as IfValid<IsValid, YearQuarters[]>;
 }
 
 export function isYearQuarter(yq: unknown): yq is YearQuarter {
@@ -98,13 +105,13 @@ export function isYearQuarter(yq: unknown): yq is YearQuarter {
       typeof yq === "object" &&
       typeof (yq as YearQuarter).year === "number" &&
       typeof (yq as YearQuarter).quarter === "number" &&
-      ((yq as YearQuarter).quarter >= 1 || (yq as YearQuarter).quarter <= 4)
+      ((yq as YearQuarter).quarter >= 1 || (yq as YearQuarter).quarter <= 4),
   );
 }
 
 export function incrementYearQuarter(
   { year, quarter }: YearQuarter,
-  incrementValue = 1
+  incrementValue = 1,
 ): YearQuarter {
   const quarterUnbounded = quarter + incrementValue;
   const yearIncrement = Math.floor((quarterUnbounded - 1) / 4);
@@ -118,7 +125,7 @@ export function incrementYearQuarter(
 
 export function yearQuarterIsGreaterThan(
   a: YearQuarter,
-  b: YearQuarter
+  b: YearQuarter,
 ): boolean {
   if (a.year === b.year) {
     return a.quarter > b.quarter;
