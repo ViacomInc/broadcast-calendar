@@ -1,5 +1,4 @@
 import { DateTime } from "luxon";
-import { getBroadcastYear, getBroadcastQuarter } from "./yearQuarter";
 import {
   getBroadcastYearInterval,
   getBroadcastQuarterInterval,
@@ -8,6 +7,8 @@ import {
 } from "./interval";
 import { getBroadcastWeek } from "./week";
 import { getBroadcastWeekKey } from "./weekKey";
+import { getBroadcastYear } from "./year";
+import { getBroadcastQuarter } from "./quarter";
 
 export function toCalendarDateTime<IsValid extends boolean>(
   broadcast: DateTime<IsValid>,

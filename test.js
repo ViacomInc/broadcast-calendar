@@ -4,6 +4,7 @@ const {
   formatToISOWithoutTZ,
   formatToSQLWithoutTZ,
   getBroadcastMonthInterval,
+  getBroadcastMonth,
   getBroadcastQuarter,
   getBroadcastQuarterInterval,
   getBroadcastQuarterIntervalFromYearQuarter,
@@ -58,6 +59,7 @@ const broadcastTestData = [
     {
       broadcastYear: 2017,
       broadcastQuarter: 4,
+      broadcastMonth: 12,
       week: ["2017-12-25 Mon", "2017-12-31 Sun"],
       month: ["2017-11-27 Mon", "2017-12-31 Sun"],
       quarter: ["2017-09-25 Mon", "2017-12-31 Sun"],
@@ -69,6 +71,7 @@ const broadcastTestData = [
     {
       broadcastYear: 2019,
       broadcastQuarter: 1,
+      broadcastMonth: 1,
       week: ["2018-12-31 Mon", "2019-01-06 Sun"],
       month: ["2018-12-31 Mon", "2019-01-27 Sun"],
       quarter: ["2018-12-31 Mon", "2019-03-31 Sun"],
@@ -80,6 +83,7 @@ const broadcastTestData = [
     {
       broadcastYear: 2019,
       broadcastQuarter: 1,
+      broadcastMonth: 3,
       week: ["2019-03-25 Mon", "2019-03-31 Sun"],
       month: ["2019-02-25 Mon", "2019-03-31 Sun"],
       quarter: ["2018-12-31 Mon", "2019-03-31 Sun"],
@@ -91,6 +95,7 @@ const broadcastTestData = [
     {
       broadcastYear: 2019,
       broadcastQuarter: 2,
+      broadcastMonth: 4,
       week: ["2019-04-01 Mon", "2019-04-07 Sun"],
       month: ["2019-04-01 Mon", "2019-04-28 Sun"],
       quarter: ["2019-04-01 Mon", "2019-06-30 Sun"],
@@ -102,6 +107,7 @@ const broadcastTestData = [
     {
       broadcastYear: 2019,
       broadcastQuarter: 2,
+      broadcastMonth: 6,
       week: ["2019-06-24 Mon", "2019-06-30 Sun"],
       month: ["2019-05-27 Mon", "2019-06-30 Sun"],
       quarter: ["2019-04-01 Mon", "2019-06-30 Sun"],
@@ -113,6 +119,7 @@ const broadcastTestData = [
     {
       broadcastYear: 2019,
       broadcastQuarter: 3,
+      broadcastMonth: 7,
       week: ["2019-07-01 Mon", "2019-07-07 Sun"],
       month: ["2019-07-01 Mon", "2019-07-28 Sun"],
       quarter: ["2019-07-01 Mon", "2019-09-29 Sun"],
@@ -124,6 +131,7 @@ const broadcastTestData = [
     {
       broadcastYear: 2019,
       broadcastQuarter: 3,
+      broadcastMonth: 9,
       week: ["2019-09-23 Mon", "2019-09-29 Sun"],
       month: ["2019-08-26 Mon", "2019-09-29 Sun"],
       quarter: ["2019-07-01 Mon", "2019-09-29 Sun"],
@@ -135,6 +143,7 @@ const broadcastTestData = [
     {
       broadcastYear: 2019,
       broadcastQuarter: 4,
+      broadcastMonth: 10,
       week: ["2019-09-30 Mon", "2019-10-06 Sun"],
       month: ["2019-09-30 Mon", "2019-10-27 Sun"],
       quarter: ["2019-09-30 Mon", "2019-12-29 Sun"],
@@ -146,6 +155,7 @@ const broadcastTestData = [
     {
       broadcastYear: 2019,
       broadcastQuarter: 4,
+      broadcastMonth: 12,
       week: ["2019-12-23 Mon", "2019-12-29 Sun"],
       month: ["2019-11-25 Mon", "2019-12-29 Sun"],
       quarter: ["2019-09-30 Mon", "2019-12-29 Sun"],
@@ -157,6 +167,7 @@ const broadcastTestData = [
     {
       broadcastYear: 2020,
       broadcastQuarter: 1,
+      broadcastMonth: 1,
       week: ["2019-12-30 Mon", "2020-01-05 Sun"],
       month: ["2019-12-30 Mon", "2020-01-26 Sun"],
       quarter: ["2019-12-30 Mon", "2020-03-29 Sun"],
@@ -168,6 +179,7 @@ const broadcastTestData = [
     {
       broadcastYear: 2020,
       broadcastQuarter: 2,
+      broadcastMonth: 5,
       week: ["2020-04-27 Mon", "2020-05-03 Sun"],
       month: ["2020-04-27 Mon", "2020-05-31 Sun"],
       quarter: ["2020-03-30 Mon", "2020-06-28 Sun"],
@@ -179,6 +191,7 @@ const broadcastTestData = [
     {
       broadcastYear: 2022,
       broadcastQuarter: 1,
+      broadcastMonth: 1,
       week: ["2021-12-27 Mon", "2022-01-02 Sun"],
       month: ["2021-12-27 Mon", "2022-01-30 Sun"],
       quarter: ["2021-12-27 Mon", "2022-03-27 Sun"],
@@ -186,6 +199,31 @@ const broadcastTestData = [
     },
   ],
 ];
+
+const broadcastMonthTestDates = [
+  ["2024-01-01", 1],
+  ["2024-01-30", 2],
+  ["2024-01-31", 2],
+  ["2024-03-31", 3],
+  ["2024-04-01", 4],
+  ["2024-04-28", 4],
+  ["2024-04-29", 5],
+  ["2024-04-30", 5],
+  ["2024-11-25", 12],
+  ["2024-11-30", 12],
+  ["2024-12-01", 12],
+  ["2024-12-31", 1],
+];
+
+test("getBroadcastMonth", (t) => {
+  broadcastMonthTestDates.forEach(([weekStart, monthNumber]) => {
+    t.is(
+      getBroadcastMonth(parseDateFromISO(weekStart)),
+      monthNumber,
+      `getBroadcastMonth ${weekStart}`,
+    );
+  });
+});
 
 const broadcastWeekTestDates = [
   ["2016-12-31", 1],
@@ -281,7 +319,7 @@ test("parseDateFromBroadcastWeekKey", (t) => {
   });
 });
 
-test("broadcast calendar interval", (t) => {
+test("broadcast calendar intervals", (t) => {
   broadcastTestData.forEach(([weekStr, expected]) => {
     const week = parseDateFromISO(weekStr);
 
@@ -322,6 +360,12 @@ test("broadcast calendar interval", (t) => {
       getBroadcastQuarter(week),
       expected.broadcastQuarter,
       `getBroadcastQuarter expects ${expected.broadcastQuarter}`,
+    );
+
+    t.deepEqual(
+      getBroadcastMonth(week),
+      expected.broadcastMonth,
+      `getBroadcastMonth expects ${expected.broadcastMonth}`,
     );
 
     t.deepEqual(

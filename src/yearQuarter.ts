@@ -1,49 +1,9 @@
 import { DateTime, Interval } from "luxon";
 
 import { YearQuarter, YearQuarters } from "./types";
-import { getBroadcastYearInterval } from "./interval";
-import { getBroadcastWeek } from "./week";
 import { IfValid, isValid } from "./helpers";
-
-export function getBroadcastYear<IsValid extends boolean>(
-  date: DateTime<IsValid>,
-): IfValid<IsValid, number> {
-  const yearInterval = getBroadcastYearInterval(date);
-
-  if (!(yearInterval && isValid(yearInterval.end))) {
-    return null as IfValid<IsValid, number>;
-  }
-
-  return yearInterval.end.get("year") as IfValid<IsValid, number>;
-}
-
-export function getBroadcastQuarter<IsValid extends boolean>(
-  date: DateTime<IsValid>,
-): IfValid<IsValid, number> {
-  const week = getBroadcastWeek(date);
-  if (!isValid(date) || week === null) {
-    return null as IfValid<IsValid, number>;
-  }
-
-  const quarterLength = 13;
-  return Math.min(Math.ceil(week / quarterLength), 4) as IfValid<
-    IsValid,
-    number
-  >;
-}
-
-export function getBroadcastQuarterWeek<IsValid extends boolean>(
-  date: DateTime<IsValid>,
-): IfValid<IsValid, [number, number]> {
-  const week = getBroadcastWeek(date);
-  if (!isValid(date) || week === null) {
-    return null as IfValid<IsValid, [number, number]>;
-  }
-
-  const quarterLength = 13;
-  const quarter = Math.min(Math.ceil(week / quarterLength), 4);
-  return [quarter, week] as IfValid<IsValid, [number, number]>;
-}
+import { getBroadcastYear } from "./year";
+import { getBroadcastQuarter } from "./quarter";
 
 export function getBroadcastYearQuarter<IsValid extends boolean>(
   date: DateTime<IsValid>,

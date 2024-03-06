@@ -58,6 +58,10 @@ returns broadcast year for a given date
 
 returns broadcast quarter for a given date
 
+- **getBroadcastMonth(date: DateTime): null | number**
+
+return broadcast month (1-12) for a given date
+
 - **getBroadcastQuarterWeek(date: DateTime): null | [number, number]**
 
 returns `[quarter, week]` numbers for a given date

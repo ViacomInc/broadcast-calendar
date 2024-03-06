@@ -13,6 +13,9 @@ function isLastWeekOverflown(date: DateTime): boolean {
   return yearEnd.toMillis() - date.toMillis() <= yearEndWeekDay * DAY;
 }
 
+/**
+ * returns broadcast week number (1-54) for a given date
+ **/
 export function getBroadcastWeek<IsValid extends boolean>(
   date: DateTime<IsValid>,
 ): IfValid<IsValid, number> {
