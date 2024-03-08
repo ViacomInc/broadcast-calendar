@@ -1,6 +1,5 @@
 import { DateTime } from "luxon";
 
-import { getBroadcastYearInterval } from "./interval";
 import { IfValid, isValid } from "./helpers";
 
 /**
@@ -9,11 +8,9 @@ import { IfValid, isValid } from "./helpers";
 export function getBroadcastYear<IsValid extends boolean>(
   date: DateTime<IsValid>,
 ): IfValid<IsValid, number> {
-  const yearInterval = getBroadcastYearInterval(date);
-
-  if (!(yearInterval && isValid(yearInterval.end))) {
+  if (!isValid(date)) {
     return null as IfValid<IsValid, number>;
   }
 
-  return yearInterval.end.get("year") as IfValid<IsValid, number>;
+  return date.endOf("week").year as unknown as IfValid<IsValid, number>;
 }

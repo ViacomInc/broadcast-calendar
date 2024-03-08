@@ -14,11 +14,7 @@ export function getBroadcastQuarter<IsValid extends boolean>(
     return null as IfValid<IsValid, number>;
   }
 
-  const quarterLength = 13;
-  return Math.min(Math.ceil(week / quarterLength), 4) as IfValid<
-    IsValid,
-    number
-  >;
+  return Math.ceil(date.endOf("week").month / 3) as IfValid<IsValid, number>;
 }
 
 /**
@@ -27,10 +23,11 @@ export function getBroadcastQuarter<IsValid extends boolean>(
 export function getBroadcastQuarterWeek<IsValid extends boolean>(
   date: DateTime<IsValid>,
 ): IfValid<IsValid, [number, number]> {
-  const week = getBroadcastWeek(date);
-  if (!isValid(date) || week === null) {
+  if (!isValid(date)) {
     return null as IfValid<IsValid, [number, number]>;
   }
+
+  const week = getBroadcastWeek(date);
 
   const quarterLength = 13;
   const quarter = Math.min(Math.ceil(week / quarterLength), 4);
