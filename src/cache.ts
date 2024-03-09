@@ -1,28 +1,17 @@
 import { DateTime } from "luxon";
-import { IfValid, isValid } from "./helpers";
 
-export function getCachedFor(
-  fn: <IsValid extends boolean>(
-    date: DateTime<IsValid>,
-  ) => IfValid<IsValid, number>,
-) {
-  const cache = new Map<string, number>();
+export function getDateCachedFor<T>(fn: (date: DateTime<true>) => T) {
+  const cache = new Map<string, T>();
 
-  return <IsValid extends boolean>(
-    date: DateTime<IsValid>,
-  ): IfValid<IsValid, number> => {
-    if (!isValid(date)) {
-      return null as IfValid<IsValid, number>;
-    }
-
-    const key = date.toISODate() as string;
+  return (date: DateTime<true>): T => {
+    const key = date.toISODate();
     const cachedValue = cache.get(key);
     if (cachedValue) {
-      return cachedValue as IfValid<IsValid, number>;
+      return cachedValue;
     }
 
     const value = fn(date);
     cache.set(key, value);
-    return value as IfValid<IsValid, number>;
+    return value;
   };
 }
