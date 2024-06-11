@@ -16,6 +16,12 @@ export function toCalendarDateTime<IsValid extends boolean>(
   return broadcast.hour < 6 ? broadcast.plus({ day: 1 }) : broadcast;
 }
 
+export function toBroadcastDateTime<IsValid extends boolean>(
+  calendar: DateTime<IsValid>,
+): DateTime<IsValid> {
+  return calendar.hour < 6 ? calendar.minus({ day: 1 }) : calendar;
+}
+
 export function getBroadcastCalendar<IsValid extends boolean>(
   date: DateTime<IsValid>,
 ) {
