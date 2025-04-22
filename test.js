@@ -198,6 +198,18 @@ const broadcastTestData = [
       year: ["2021-12-27 Mon", "2022-12-25 Sun"],
     },
   ],
+  [
+    "2025-01-01",
+    {
+      broadcastYear: 2025,
+      broadcastQuarter: 1,
+      broadcastMonth: 1,
+      week: ["2024-12-30 Mon", "2025-01-05 Sun"],
+      month: ["2024-12-30 Mon", "2025-01-26 Sun"],
+      quarter: ["2024-12-30 Mon", "2025-03-30 Sun"],
+      year: ["2024-12-30 Mon", "2025-12-28 Sun"],
+    },
+  ],
 ];
 
 const broadcastMonthTestDates = [
@@ -257,6 +269,7 @@ const broadcastWeekTestDates = [
   ["2022-12-25", 52],
   ["2022-12-26", 1],
   ["2023-12-30", 53],
+  ["2025-01-01", 1],
   ["2028-12-29", 53],
 ];
 

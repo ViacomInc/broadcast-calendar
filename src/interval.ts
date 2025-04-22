@@ -97,7 +97,7 @@ export function getBroadcastQuarterInterval<IsValid extends boolean>(
   }
 
   if (!weekStart.hasSame(weekEnd, "year")) {
-    const end = getLastSunday(date.plus({ months: 3 }).endOf("month"));
+    const end = getLastSunday(weekStart.plus({ months: 3 }).endOf("month"));
     return Interval.fromDateTimes(weekStart, end) as IfValid<
       IsValid,
       Interval<IsValid>
