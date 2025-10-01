@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const calendar = require("../lib");
+const calendar = require("../build");
 
 const now = calendar.DateTime.now();
 const usageHelp = `
