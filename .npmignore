@@ -1,7 +1,7 @@
 .*
 *.log
 test*
-test/
-src/
+tests/
+lib/
 mocha*
 tsconfig*
