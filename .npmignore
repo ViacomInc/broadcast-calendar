@@ -2,6 +2,6 @@
 *.log
 test*
 tests/
-lib/
+/lib/
 mocha*
 tsconfig*
