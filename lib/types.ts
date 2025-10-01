@@ -1,12 +1,12 @@
-export type YearQuarter = {
+export interface YearQuarter {
   year: number;
   quarter: number;
-};
+}
 
-export type YearQuarters = {
+export interface YearQuarters {
   year: number;
   quarters: number[];
-};
+}
 
 export const BroadcastTimeZone = "America/New_York";
 

@@ -45,7 +45,7 @@ export function getBroadcastWeekKeyInterval(
     return null;
   }
 
-  const start = getBroadcastYearInterval(middleYear)?.start;
+  const start = getBroadcastYearInterval(middleYear).start;
   if (!isValid(start)) {
     return null;
   }

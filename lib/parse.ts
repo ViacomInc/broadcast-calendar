@@ -35,7 +35,7 @@ export function parseDateFromBroadcastWeekKey(
     DateTime.fromObject({ year: broadcastYear, month: 7, day: 1 }),
   );
 
-  if (!yearInterval || !isValid(yearInterval?.start)) {
+  if (!yearInterval || !yearInterval.isValid || !isValid(yearInterval.start)) {
     return null;
   }
 

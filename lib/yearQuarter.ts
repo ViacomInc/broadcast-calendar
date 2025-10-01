@@ -41,15 +41,13 @@ export function getBroadcastYearsQuarters<IsValid extends boolean>({
   return Object.values(
     yearQuarters.reduce(
       (
-        acc: { [key: number]: YearQuarters },
+        acc: Record<number, undefined | YearQuarters>,
         { year, quarter }: YearQuarter,
       ) => {
-        if (!acc[year]) {
-          acc[year] = {
-            year,
-            quarters: [],
-          };
-        }
+        acc[year] ??= {
+          year,
+          quarters: [],
+        };
 
         acc[year].quarters.push(quarter);
         return acc;

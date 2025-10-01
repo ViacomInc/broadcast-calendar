@@ -11,16 +11,16 @@ const plugins = [
 ];
 
 export default {
-  input: "src/index.ts",
+  input: "lib/index.ts",
   output: [
     {
-      file: "lib/index.js",
+      file: "build/index.js",
       format: "cjs",
       sourcemap: true,
       exports: "named",
     },
     {
-      file: "lib/index.es.js",
+      file: "build/index.es.js",
       format: "es",
       sourcemap: true,
       exports: "named",

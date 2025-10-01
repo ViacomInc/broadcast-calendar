@@ -1,8 +1,4 @@
-const test = require("ava");
-const {
-  formatBroadcastDateInterval,
-  formatToISOWithoutTZ,
-  formatToSQLWithoutTZ,
+import {
   getBroadcastMonthInterval,
   getBroadcastMonth,
   getBroadcastQuarter,
@@ -21,7 +17,6 @@ const {
   incrementYearQuarter,
   Interval,
   isYearQuarter,
-  makeFormatter,
   parseDateFromBroadcastWeekKey,
   parseDateFromISO,
   parseDateFromSQL,
@@ -31,29 +26,49 @@ const {
   yearQuarterIsGreaterThan,
   yearQuarterToInteger,
   integerToYearQuarter,
-} = require("./");
+  formatBroadcastDateInterval,
+  formatToISOWithoutTZ,
+  formatToSQLWithoutTZ,
+  makeFormatter,
+  DateTime,
+} from "../lib";
+import { expect, test } from "vitest";
 
 const testFormat = makeFormatter("yyyy-MM-dd EEE");
 
-test("parsing dates", (t) => {
-  t.is(parseDateFromSQL("2021-07-23 03:15:00").toISODate(), "2021-07-23");
-  t.is(parseDateFromSQL("2021-08-11").toISODate(), "2021-08-11");
-  t.is(parseDateFromISO("2021-07-23T03:15:00").toISODate(), "2021-07-23");
-  t.is(parseDateFromISO("2021-08-11").toISODate(), "2021-08-11");
+test("parsing dates", () => {
+  expect(parseDateFromSQL("2021-07-23 03:15:00").toISODate()).toBe(
+    "2021-07-23",
+  );
+  expect(parseDateFromSQL("2021-08-11").toISODate()).toBe("2021-08-11");
+  expect(parseDateFromISO("2021-07-23T03:15:00").toISODate()).toBe(
+    "2021-07-23",
+  );
+  expect(parseDateFromISO("2021-08-11").toISODate()).toBe("2021-08-11");
 });
 
-test("parsing intervals", (t) => {
-  t.is(
+test("parsing intervals", () => {
+  expect(
     parseIntervalFromSQL(["2021-07-23 03:15:00", "2021-08-11"]).isValid,
-    true,
-  );
-  t.is(
+  ).toBe(true);
+
+  expect(
     parseIntervalFromISO(["2021-07-23T03:15:00", "2021-08-11"]).isValid,
-    true,
-  );
+  ).toBe(true);
 });
 
-const broadcastTestData = [
+const broadcastTestData: [
+  string,
+  {
+    broadcastYear: number;
+    broadcastQuarter: number;
+    broadcastMonth: number;
+    week: [string, string];
+    month: [string, string];
+    quarter: [string, string];
+    year: [string, string];
+  },
+][] = [
   [
     "2017-12-31",
     {
@@ -212,7 +227,7 @@ const broadcastTestData = [
   ],
 ];
 
-const broadcastMonthTestDates = [
+const broadcastMonthTestDates: [string, number][] = [
   ["2024-01-01", 1],
   ["2024-01-30", 2],
   ["2024-01-31", 2],
@@ -227,17 +242,14 @@ const broadcastMonthTestDates = [
   ["2024-12-31", 1],
 ];
 
-test("getBroadcastMonth", (t) => {
-  broadcastMonthTestDates.forEach(([weekStart, monthNumber]) => {
-    t.is(
-      getBroadcastMonth(parseDateFromISO(weekStart)),
-      monthNumber,
-      `getBroadcastMonth ${weekStart}`,
-    );
-  });
-});
+test.each(broadcastMonthTestDates)(
+  "getBroadcastMonth %s",
+  (weekStart, monthNumber) => {
+    expect(getBroadcastMonth(parseDateFromISO(weekStart))).toBe(monthNumber);
+  },
+);
 
-const broadcastWeekTestDates = [
+const broadcastWeekTestDates: [string, number][] = [
   ["2016-12-31", 1],
   ["2017-12-31", 53],
   ["2018-01-01", 1],
@@ -273,15 +285,12 @@ const broadcastWeekTestDates = [
   ["2028-12-29", 53],
 ];
 
-test("getBroadcastWeek", (t) => {
-  broadcastWeekTestDates.forEach(([weekStart, weekNumber]) => {
-    t.is(
-      getBroadcastWeek(parseDateFromISO(weekStart)),
-      weekNumber,
-      `getBroadcastWeek ${weekStart}`,
-    );
-  });
-});
+test.each(broadcastWeekTestDates)(
+  "getBroadcastWeek %s",
+  (weekStart, weekNumber) => {
+    expect(getBroadcastWeek(parseDateFromISO(weekStart))).toBe(weekNumber);
+  },
+);
 
 const broadcastWeekKeyTestDates = {
   201601: "2015-12-28",
@@ -315,118 +324,108 @@ const broadcastWeekKeyTestDates = {
   202853: "2028-12-25",
 };
 
-test("parseDateFromBroadcastWeekKey", (t) => {
-  Object.entries(broadcastWeekKeyTestDates).forEach(([weekKey, weekStart]) => {
-    // test data
-    t.is(
-      getBroadcastWeekKey(parseDateFromISO(weekStart)),
+test.each(Object.entries(broadcastWeekKeyTestDates))(
+  "parseDateFromISO %s",
+  (weekKey, weekStart) => {
+    expect(getBroadcastWeekKey(parseDateFromISO(weekStart))).toBe(
       parseInt(weekKey, 10),
     );
+  },
+);
 
-    // test function
-    t.is(
-      parseDateFromBroadcastWeekKey(weekKey).toISODate(),
-      weekStart,
-      `parseDateFromBroadcastWeekKey ${weekKey}`,
-    );
-  });
-});
+test.each(Object.entries(broadcastWeekKeyTestDates))(
+  "parseDateFromBroadcastWeekKey %i",
+  (weekKey, weekStart) => {
+    expect(parseDateFromBroadcastWeekKey(weekKey)?.toISODate()).toBe(weekStart);
+  },
+);
 
-test("broadcast calendar intervals", (t) => {
-  broadcastTestData.forEach(([weekStr, expected]) => {
-    const week = parseDateFromISO(weekStr);
+test.each(broadcastTestData)(
+  "broadcast calendar intervals for $s",
+  (weekStr, expected) => {
+    const week = parseDateFromISO(weekStr) as DateTime<true>;
 
-    t.deepEqual(
+    expect(
       formatBroadcastDateInterval(getBroadcastWeekInterval(week), testFormat),
-      expected.week,
       `getBroadcastWeekInterval ${weekStr}`,
-    );
+    ).toStrictEqual(expected.week);
 
-    t.deepEqual(
+    expect(
       formatBroadcastDateInterval(getBroadcastMonthInterval(week), testFormat),
-      expected.month,
       `getBroadcastMonthInterval expects ${expected.month.toString()}`,
-    );
+    ).toStrictEqual(expected.month);
 
-    t.deepEqual(
+    expect(
       formatBroadcastDateInterval(
         getBroadcastQuarterInterval(week),
         testFormat,
       ),
-      expected.quarter,
       `getBroadcastQuarterInterval expects ${expected.quarter.toString()}`,
-    );
+    ).toStrictEqual(expected.quarter);
 
-    t.deepEqual(
+    expect(
       formatBroadcastDateInterval(getBroadcastYearInterval(week), testFormat),
-      expected.year,
       `getBroadcastYearInterval expects ${expected.year.toString()}`,
-    );
+    ).toStrictEqual(expected.year);
 
-    t.deepEqual(
+    expect(
       getBroadcastYear(week),
-      expected.broadcastYear,
       `getBroadcastYear expects ${expected.broadcastYear}`,
-    );
+    ).toBe(expected.broadcastYear);
 
-    t.deepEqual(
+    expect(
       getBroadcastQuarter(week),
-      expected.broadcastQuarter,
       `getBroadcastQuarter expects ${expected.broadcastQuarter}`,
-    );
+    ).toBe(expected.broadcastQuarter);
 
-    t.deepEqual(
+    expect(
       getBroadcastMonth(week),
-      expected.broadcastMonth,
       `getBroadcastMonth expects ${expected.broadcastMonth}`,
-    );
+    ).toBe(expected.broadcastMonth);
 
-    t.deepEqual(
+    expect(
       getBroadcastYearQuarter(week),
-      {
-        year: expected.broadcastYear,
-        quarter: expected.broadcastQuarter,
-      },
       `getBroadcastYearQuarter expects ${expected.broadcastYear} ${expected.broadcastQuarter}`,
-    );
+    ).toStrictEqual({
+      year: expected.broadcastYear,
+      quarter: expected.broadcastQuarter,
+    });
 
     const expectedWeekNubmer = broadcastWeekTestDates.find(
       (w) => weekStr === w[0],
     );
 
-    t.deepEqual(
-      getBroadcastQuarterWeek(parseDateFromISO(week)),
-      [expected.broadcastQuarter, expectedWeekNubmer[1]],
-      `getBroadcastQuarterWeek ${week} expects [${expected.broadcastQuarter} ${expectedWeekNubmer[1]}]`,
-    );
+    expect(
+      getBroadcastQuarterWeek(week),
+      `getBroadcastQuarterWeek ${weekStr} expects [${expected.broadcastQuarter} ${expectedWeekNubmer?.[1]}]`,
+    ).toStrictEqual([expected.broadcastQuarter, expectedWeekNubmer?.[1]]);
 
-    t.deepEqual(
+    expect(
       formatBroadcastDateInterval(
         getBroadcastQuarterIntervalFromYearQuarter({
           year: expected.broadcastYear,
           quarter: expected.broadcastQuarter,
-        }),
+        }) as Interval<true>,
         testFormat,
       ),
-      expected.quarter,
       `getBroadcastQuarterIntervalFromYearQuarter expects ${expected.quarter.toString()}`,
-    );
+    ).toStrictEqual(expected.quarter);
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const yearQuarter = yearQuarterToInteger({
       year: expected.broadcastYear,
       quarter: expected.broadcastQuarter,
-    });
+    })!;
 
-    t.deepEqual(
+    expect(
       integerToYearQuarter(yearQuarter),
-      {
-        year: expected.broadcastYear,
-        quarter: expected.broadcastQuarter,
-      },
       `yearQuarterToInteger matches integerToYearQuarter`,
-    );
-  });
-});
+    ).toStrictEqual({
+      year: expected.broadcastYear,
+      quarter: expected.broadcastQuarter,
+    });
+  },
+);
 
 const broadcastWeekKeys = {
   "2016-12-31": 201701,
@@ -451,67 +450,68 @@ const broadcastWeekKeys = {
   "2028-12-29": 202853,
 };
 
-test("getBroadcastWeekKey", (t) => {
-  Object.entries(broadcastWeekKeys).map(([dateStr, weekKey]) => {
+test.each(Object.entries(broadcastWeekKeys))(
+  `getBroadcastWeekKey for %s expects %i`,
+  (dateStr, weekKey) => {
     const date = parseDateFromISO(dateStr);
-    t.is(
-      getBroadcastWeekKey(date),
-      weekKey,
-      `getBroadcastWeekKey for ${dateStr} expects ${weekKey}`,
-    );
-  });
-});
+    expect(getBroadcastWeekKey(date)).toBe(weekKey);
+  },
+);
 
-test("getBroadcastWeekKeyInterval", (t) => {
-  Object.entries(broadcastWeekKeys).map(([dateStr, weekKey]) => {
+test.each(Object.entries(broadcastWeekKeys))(
+  `getBroadcastWeekKeyInterval for %s`,
+  (dateStr, weekKey) => {
     const { start: expectedStart, end: expectedEnd } = getBroadcastWeekInterval(
-      parseDateFromISO(dateStr),
+      parseDateFromISO(dateStr) as DateTime<true>,
     );
-    const { start, end } = getBroadcastWeekKeyInterval(weekKey);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const { start, end } = getBroadcastWeekKeyInterval(weekKey)!;
 
-    t.is(
+    expect(
       start.toISODate(),
-      expectedStart.toISODate(),
-      `getBroadcastWeekKeyInterval start date for ${weekKey} expects ${expectedStart}`,
-    );
-    t.is(
-      end.toISODate(),
-      expectedEnd.toISODate(),
-      `getBroadcastWeekKeyInterval end date for ${weekKey} expects ${expectedEnd}`,
-    );
-  });
-});
+      `getBroadcastWeekKeyInterval start date for ${weekKey} expects ${expectedStart.toISODate()}`,
+    ).toBe(expectedStart.toISODate());
 
-test("year quarter comparasing function", (t) => {
+    expect(
+      end.toISODate(),
+      `getBroadcastWeekKeyInterval end date for ${weekKey} expects ${expectedEnd.toISODate()}`,
+    ).toBe(expectedEnd.toISODate());
+  },
+);
+
+test("year quarter comparasing function", () => {
   const larger = { year: 2021, quarter: 4 };
   const smaller = { year: 2020, quarter: 4 };
 
-  t.is(yearQuarterIsGreaterThan(smaller, larger), false);
-  t.is(yearQuarterIsGreaterThan(larger, smaller), true);
-  t.is(yearQuarterIsGreaterThan(larger, larger), false);
+  expect(yearQuarterIsGreaterThan(smaller, larger)).toBe(false);
+  expect(yearQuarterIsGreaterThan(larger, smaller)).toBe(true);
+  expect(yearQuarterIsGreaterThan(larger, larger)).toBe(false);
 });
 
-test("year quarter increment function", (t) => {
+test("year quarter increment function", () => {
   const yq = { year: 2021, quarter: 4 };
 
-  t.deepEqual(incrementYearQuarter(yq, 1), { year: 2022, quarter: 1 });
-  t.deepEqual(incrementYearQuarter(yq, -4), { year: 2020, quarter: 4 });
+  expect(incrementYearQuarter(yq, 1)).toStrictEqual({ year: 2022, quarter: 1 });
+  expect(incrementYearQuarter(yq, -4)).toStrictEqual({
+    year: 2020,
+    quarter: 4,
+  });
 });
 
-test("year quarter type guard", (t) => {
-  t.is(isYearQuarter({ year: 2021, quarter: 4 }), true);
-  t.is(isYearQuarter({ year: 2021 }), false);
-  t.is(isYearQuarter({ quarter: 4 }), false);
-  t.is(isYearQuarter({ year: "2021", quarter: 4 }), false);
-  t.is(isYearQuarter({ year: "2021", quarter: "4" }), false);
-  t.is(isYearQuarter(), false);
+test("year quarter type guard", () => {
+  expect(isYearQuarter({ year: 2021, quarter: 4 })).toBe(true);
+  expect(isYearQuarter({ year: 2021 })).toBe(false);
+  expect(isYearQuarter({ quarter: 4 })).toBe(false);
+  expect(isYearQuarter({ year: "2021", quarter: 4 })).toBe(false);
+  expect(isYearQuarter({ year: "2021", quarter: "4" })).toBe(false);
+  expect(isYearQuarter(undefined)).toBe(false);
 });
 
-test("years quarters from Interval", (t) => {
+test("years quarters from Interval", () => {
   const interval = Interval.fromISO("2020-07-01/2021-07-01");
   const yearsQuarters = getBroadcastYearsQuarters(interval);
 
-  t.deepEqual(yearsQuarters, [
+  expect(yearsQuarters).toStrictEqual([
     {
       year: 2020,
       quarters: [3, 4],
@@ -523,13 +523,13 @@ test("years quarters from Interval", (t) => {
   ]);
 });
 
-test("broadcast weeks in interval", (t) => {
-  const interval = Interval.fromISO("2021-07-23/2021-08-11");
+test("broadcast weeks in interval", () => {
+  const interval = Interval.fromISO("2021-07-23/2021-08-11") as Interval<true>;
   const weeksIntervals = getBroadcastWeeksInInterval(interval).map(
     ({ start, end }) => ({ start: start.toISODate(), end: end.toISODate() }),
   );
 
-  t.deepEqual(weeksIntervals, [
+  expect(weeksIntervals).toStrictEqual([
     {
       start: "2021-07-19",
       end: "2021-07-25",
@@ -549,35 +549,30 @@ test("broadcast weeks in interval", (t) => {
   ]);
 });
 
-test("converting from broadcast calendar to gregorian calendar", (t) => {
-  t.is(
+test("converting from broadcast calendar to gregorian calendar", () => {
+  expect(
     toCalendarDateTime(parseDateFromSQL("2022-07-23 03:15:00")).toISODate(),
-    "2022-07-24",
-  );
+  ).toBe("2022-07-24");
 
-  t.is(
+  expect(
     toCalendarDateTime(parseDateFromSQL("2022-07-23 06:15:00")).toISODate(),
-    "2022-07-23",
-  );
+  ).toBe("2022-07-23");
 });
 
-test("2022-12-25T23:59:59-05:00 is not 202201", (t) => {
-  t.is(
+test("2022-12-25T23:59:59-05:00 is not 202201", () => {
+  expect(
     getBroadcastWeekKey(parseDateFromISO("2022-12-25T23:59:59-05:00")),
-    202252,
-  );
+  ).toBe(202252);
 });
 
-test("formatToISOWithoutTZ", (t) => {
-  t.is(
+test("formatToISOWithoutTZ", () => {
+  expect(
     formatToISOWithoutTZ(parseDateFromISO("2022-12-25T23:59:59-05:00")),
-    "2022-12-25T23:59:59",
-  );
+  ).toBe("2022-12-25T23:59:59");
 });
 
-test("formatToSQLWithoutTZ", (t) => {
-  t.is(
+test("formatToSQLWithoutTZ", () => {
+  expect(
     formatToSQLWithoutTZ(parseDateFromISO("2022-12-25T23:59:59-05:00")),
-    "2022-12-25 23:59:59.000",
-  );
+  ).toBe("2022-12-25 23:59:59.000");
 });

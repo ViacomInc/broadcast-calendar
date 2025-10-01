@@ -1,7 +1,7 @@
 import { DateTime, Interval } from "luxon";
 import { BroadcastTimeZone, StringInterval } from "./types";
-import { IfValid } from "./helpers";
 import { BroadcastCalendar } from "./calendar";
+import { IfValid } from "./helpers";
 
 export const makeFormatter =
   (format: string) =>
@@ -16,7 +16,7 @@ export function formatToISOWithoutTZ<IsValid extends boolean>(
   return datetime.toISO({
     includeOffset: false,
     suppressMilliseconds: true,
-  });
+  }) as IfValid<IsValid, string>;
 }
 
 export function formatToSQLWithoutTZ<IsValid extends boolean>(
@@ -24,14 +24,14 @@ export function formatToSQLWithoutTZ<IsValid extends boolean>(
 ) {
   return datetime.toSQL({
     includeOffset: false,
-  });
+  }) as IfValid<IsValid, string>;
 }
 
 export function formatBroadcastDateInterval<IsValid extends boolean>(
   interval: Interval<IsValid>,
   format = toISODate,
 ): IfValid<IsValid, StringInterval> {
-  if (!interval.start || !interval.end) {
+  if (!interval.isValid || !interval.start || !interval.end) {
     return null as IfValid<IsValid, StringInterval>;
   }
 
@@ -53,7 +53,7 @@ export function formatBroadcastCalendar<IsValid extends boolean>({
   weekInterval,
 }: BroadcastCalendar<IsValid>) {
   return {
-    date: date.toISODate(),
+    date: date.toISODate() as IfValid<IsValid, string>,
     year,
     yearInterval: yearInterval && formatBroadcastDateInterval(yearInterval),
     quarter,
@@ -61,8 +61,12 @@ export function formatBroadcastCalendar<IsValid extends boolean>({
       quarterInterval && formatBroadcastDateInterval(quarterInterval),
     monthInterval: monthInterval && formatBroadcastDateInterval(monthInterval),
     week,
-    weekInterval: weekInterval && formatBroadcastDateInterval(weekInterval),
+    weekInterval: formatBroadcastDateInterval(weekInterval),
     weekKey,
-    weekDay: date.toFormat("EEEE"),
+    weekDay: date.toFormat("EEEE") as IfValid<
+      IsValid,
+      string,
+      "Invalide DateTime"
+    >,
   };
 }
